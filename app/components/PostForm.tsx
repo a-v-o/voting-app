@@ -1,0 +1,67 @@
+"use client";
+
+import { useActionState, useState } from "react";
+import { createNewPost, deletePost } from "@/actions/actions";
+import { Button } from "@/components/ui/button";
+import { TElection } from "@/utils/types";
+import { Input } from "./ui/input";
+
+const initialState = {
+  message: "",
+};
+
+export default function PostForm({ election }: { election: TElection }) {
+  const [hidden, setHidden] = useState(true);
+  const [state, formAction] = useActionState(createNewPost, initialState);
+
+  return (
+    <div className="flex flex-col w-full">
+      <Button
+        className="mb-4"
+        onClick={() => {
+          setHidden(!hidden);
+        }}
+      >
+        Add Post
+      </Button>
+
+      <div className={hidden ? "hidden" : "flex flex-col"}>
+        <form action={formAction} className="flex flex-col gap-2 w-full">
+          <label htmlFor="post">Post:</label>
+          <Input type="text" name="post" id="post" />
+          <Input type="hidden" name="election" value={election?.name} />
+          <Button>Add</Button>
+        </form>
+        <p className="text-red-600 text-center m-4">{state?.message}</p>
+      </div>
+
+      <div>
+        <h2>Posts:</h2>
+        <div className="flex flex-col gap-4">
+          {election.posts.map((post, index) => {
+            return (
+              <form key={post} action={deletePost}>
+                <div className="flex items-center gap-3">
+                  <p>{index + 1}</p>
+                  <Input
+                    type="text"
+                    name="post"
+                    id={post}
+                    value={post}
+                    readOnly={true}
+                  />
+                  <Input
+                    type="hidden"
+                    name="electionName"
+                    value={election.name}
+                  />
+                  <Button>Delete</Button>
+                </div>
+              </form>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
