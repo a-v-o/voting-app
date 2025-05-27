@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
-// import { NavBar } from "./components/NavBar";
+import { NavBar } from "./components/NavBar";
 
 export const metadata: Metadata = {
   title: "Voting App",
@@ -22,9 +22,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <nav className="absolute top-4 right-4 flex justify-end z-10">
+          <nav className="h-16 absolute top-0 right-4 flex items-center z-10">
             <NavBar />
-          </nav> */}
+          </nav>
           {children}
         </ThemeProvider>
       </body>
