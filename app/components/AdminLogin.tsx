@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { adminLogin } from "@/actions/actions";
 import Link from "next/link";
 import { useActionState } from "react";
+import { LoaderIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -57,7 +58,13 @@ export default function AdminLogin() {
             </div>
             <p className="text-center text-red-600">{state?.message}</p>
             <Button type="submit" className="w-full">
-              {pending ? "Submitting..." : "Proceed"}
+              {pending ? (
+                <div className="animate-spin">
+                  <LoaderIcon />
+                </div>
+              ) : (
+                "Proceed"
+              )}
             </Button>
           </form>
         </CardContent>
