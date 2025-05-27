@@ -15,17 +15,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <body className="min-w-screen min-h-screen flex justify-center items-center">
-          <NavBar />
+      <body className="min-w-screen min-h-screen flex justify-center items-center">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <nav className="absolute top-4 right-4 flex justify-end z-10">
+            <NavBar />
+          </nav>
           {children}
-        </body>
-      </ThemeProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

@@ -306,7 +306,7 @@ export async function createElection(
     email: session.email,
   }).exec();
 
-  const isAllowedToCreate = admin.allowedToCreate;
+  const isAllowedToCreate = admin.allowedToCreate || admin.isSupreme;
 
   if (!isAllowedToCreate) {
     return {
@@ -337,7 +337,7 @@ export async function createElection(
 
   await admin.save();
 
-  redirect(`/editElection/${election._id}`);
+  redirect(`/admin/editElection/${election._id}`);
 }
 
 //done
@@ -438,6 +438,25 @@ export async function signUp(
   await admin.save();
 
   await createSession(adminEmail);
+}
+
+export async function becomeSupreme(
+  prevState: { message: string } | undefined,
+  formdata: FormData
+) {
+  const adminEmail = formdata.get("email") as string;
+  const password = formdata.get("password") as string;
+
+  await dbConnect();
+
+  const admin = await Admin.findOne({ email: adminEmail }).exec();
+  if (password == process.env.MASTER_KEY) {
+    admin.isSupreme = true;
+  } else {
+    return { message: "You are not worthy!" };
+  }
+  await admin.save();
+  redirect("/admin");
 }
 
 export async function adminLogin(

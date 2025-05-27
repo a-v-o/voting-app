@@ -14,7 +14,7 @@ export default function CreateElection() {
   const [state, formAction] = useActionState(createElection, initialState);
 
   return (
-    <div>
+    <div className="flex flex-col gap-2 items-center">
       <div>
         <form action={formAction} className="flex flex-col gap-2">
           <Label htmlFor="electionName">Election Name:</Label>
@@ -22,7 +22,7 @@ export default function CreateElection() {
           <Button>New Election</Button>
         </form>
       </div>
-      <p>{state.message}</p>
+      <p className="text-red-500">{state.message}</p>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_STRING as string;
-
 let cached = global.mongoose;
 
 if (!cached) {

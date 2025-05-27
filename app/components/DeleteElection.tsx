@@ -28,7 +28,7 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
   );
 
   return (
-    <div>
+    <div className="flex flex-col gap-4 items-center">
       <AlertDialog>
         <AlertDialogTrigger>
           <Button>Delete Election</Button>
