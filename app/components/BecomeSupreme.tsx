@@ -24,7 +24,7 @@ export default function BecomeSupreme() {
     initialState
   );
   return (
-    <div className={"flex flex-col gap-6"}>
+    <div className="flex flex-col gap-6 p-4">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
