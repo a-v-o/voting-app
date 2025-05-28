@@ -14,8 +14,8 @@ export default function Layout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 items-center gap-2 border-b px-4">
+      <SidebarInset className="p-0 self-start">
+        <header className="flex h-16 items-center gap-2 border-b px-4 self-start">
           <SidebarTrigger className="-ml-1" />
         </header>
         <div className="w-full h-[90%] flex justify-center">{children}</div>

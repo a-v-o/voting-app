@@ -37,7 +37,7 @@ export default async function SelectElection({
       {queriedElections.map((election) => {
         return (
           <Link
-            className="ring-1 ring-black hover:bg-slate-100 p-2 rounded"
+            className="ring-1 p-2 rounded"
             href={`/admin/editElection/${election._id}`}
             key={election._id.toString()}
           >
