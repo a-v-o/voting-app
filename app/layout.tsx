@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-w-screen min-h-screen flex justify-center items-center m-0 p-0">
+      <body className="min-w-screen min-h-screen flex justify-center items-center">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
