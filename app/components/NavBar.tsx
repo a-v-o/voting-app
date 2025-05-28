@@ -51,7 +51,7 @@ export function NavBar() {
   }
 
   return (
-    <nav className="h-16 w-full px-4 absolute top-0 left-0 justify-end gap-4 flex shrink-0 items-center z-10">
+    <nav className="h-16 w-content px-4 absolute top-0 right-0 justify-end gap-4 flex shrink-0 items-center z-10">
       <Button variant="outline" asChild>
         <Link href="/" className="h-5 w-5">
           <HomeIcon />
