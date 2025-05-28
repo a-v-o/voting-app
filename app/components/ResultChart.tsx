@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   ChartConfig,
   ChartContainer,
@@ -27,25 +27,30 @@ const chartConfig = {
 
 export default function ResultChart({ chartData }: { chartData: Chart[] }) {
   return (
-    <div>
+    <div className="p-8">
       {chartData.map((chart) => {
         const key = Object.keys(chart)[0];
         return (
           chart[key].length != 0 && (
-            <div className="flex flex-col items-center">
-              <h1>{key}</h1>
+            <div className="flex flex-col items-center p-4">
+              <h1 className="mb-4">{key}</h1>
               <ChartContainer
                 key={key}
                 config={chartConfig}
                 className="min-h-[200px] w-full min-w-[480px]"
               >
-                <BarChart accessibilityLayer data={chart[key]}>
-                  <CartesianGrid vertical={false} />
+                <BarChart
+                  accessibilityLayer
+                  data={chart[key]}
+                  layout="vertical"
+                >
+                  <CartesianGrid />
+                  <YAxis dataKey="name" type="category" />
                   <XAxis
-                    dataKey="name"
+                    type="number"
                     tickLine={false}
                     tickMargin={10}
-                    axisLine={false}
+                    allowDecimals={false}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
 

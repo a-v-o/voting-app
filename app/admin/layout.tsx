@@ -12,7 +12,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="self-start">
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 items-center gap-2 border-b px-4">

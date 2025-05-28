@@ -39,9 +39,11 @@ export default async function Page({
         candidates={JSON.parse(JSON.stringify(candidates))}
       />
       <AddVoters election={election} />
-      <ConfirmElection id={election._id} />
-      <StopElection id={election._id} />
-      <DeleteElection id={election._id} />
+      <div className="w-min flex flex-col gap-4 items-center">
+        <ConfirmElection id={election._id} />
+        <StopElection id={election._id} />
+        <DeleteElection id={election._id} />
+      </div>
     </div>
   );
 }

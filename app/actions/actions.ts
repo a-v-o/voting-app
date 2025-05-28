@@ -401,6 +401,15 @@ export async function deleteElection(
   if (election.isLive == true) {
     return { message: "You cannot delete a live election" };
   }
+
+  await Candidate.deleteMany({
+    _id: { $in: election.candidates },
+  });
+
+  await Voter.deleteMany({
+    _id: { $in: election.eligibleVoters },
+  });
+
   await election.deleteOne().exec();
   redirect("/admin");
 }

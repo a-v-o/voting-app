@@ -14,11 +14,11 @@ export default function StopElection({ id }: { id: Types.ObjectId }) {
   const [state, formAction] = useActionState(stopElectionWithId, initialState);
 
   return (
-    <div className="flex flex-col items-center">
-      <form action={formAction}>
-        <Button>Stop Election</Button>
+    <div className="flex flex-col items-center justify-center w-full">
+      <form action={formAction} className="w-full">
+        <Button className="w-full">Stop Election</Button>
       </form>
-      <p className="text-red-500">{state.message}</p>
+      <p className="text-red-500 text-sm">{state.message}</p>
     </div>
   );
 }

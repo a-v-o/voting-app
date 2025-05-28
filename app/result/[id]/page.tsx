@@ -25,25 +25,25 @@ export default async function Page({
 
   const candidates = await Candidate.find({
     _id: { $in: election.candidates },
-  });
+  }).exec();
 
   const posts = election.posts;
 
   for (const post of posts) {
     const chart: Chart = {};
     chart[post] = [];
-    const entry: Entry = {};
+
     for (const candidate of candidates) {
       if (post == candidate.post) {
+        const entry: Entry = {};
         entry["name"] = candidate.name;
         entry["votes"] = candidate.votes;
-      } else {
-        continue;
+        chart[post].push(entry);
       }
-      chart[post].push(entry);
     }
     chartData.push(chart);
   }
+  // console.log(chartData[0]);
 
   return <ResultChart chartData={chartData} />;
 }

@@ -22,9 +22,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <nav className="h-16 absolute top-0 right-4 flex shrink-0 items-center z-10">
-            <NavBar />
-          </nav>
+          <NavBar />
           {children}
         </ThemeProvider>
       </body>

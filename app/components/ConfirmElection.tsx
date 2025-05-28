@@ -17,11 +17,11 @@ export default function ConfirmElection({ id }: { id: Types.ObjectId }) {
   );
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center justify-center w-full">
       <form action={formAction}>
         <Button>Confirm Election</Button>
       </form>
-      <p className="text-red-500">{state.message}</p>
+      <p className="text-red-500 text-sm">{state.message}</p>
     </div>
   );
 }

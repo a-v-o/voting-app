@@ -36,13 +36,14 @@ export default async function SelectElection({
       <Search />
       {queriedElections.map((election) => {
         return (
-          <Link
-            className="ring-1 p-2 rounded"
-            href={`/admin/editElection/${election._id}`}
+          <div
             key={election._id.toString()}
+            className="border p-2 rounded hover:bg-secondary"
           >
-            <p>{election.name}</p>
-          </Link>
+            <Link href={`/admin/editElection/${election._id}`}>
+              <p>{election.name}</p>
+            </Link>
+          </div>
         );
       })}
     </div>

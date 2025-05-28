@@ -88,11 +88,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <div className="w-full flex flex-col gap-4 p-8">
-          <Button asChild>
+          {/* <Button asChild>
             <Link href="/">
               <Home /> Go to home page
             </Link>
-          </Button>
+          </Button> */}
           <Button variant="outline" onClick={logOut}>
             <LogOut />
             Log out

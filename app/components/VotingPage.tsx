@@ -5,6 +5,7 @@ import { TCandidate, TElection } from "@/utils/types";
 import Image from "next/image";
 import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
+import { LoaderIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -20,7 +21,10 @@ export default function VotingPage({
   voterCode: string;
 }) {
   const voteInElection = vote.bind(null, election._id, voterCode);
-  const [state, formAction] = useActionState(voteInElection, initialState);
+  const [state, formAction, pending] = useActionState(
+    voteInElection,
+    initialState
+  );
 
   return (
     <form
@@ -67,7 +71,15 @@ export default function VotingPage({
           </div>
         );
       })}
-      <Button>Submit Votes</Button>
+      <Button>
+        {pending ? (
+          <div>
+            <LoaderIcon />
+          </div>
+        ) : (
+          "Submit Votes"
+        )}
+      </Button>
       <p>{state?.message}</p>
     </form>
   );

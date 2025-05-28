@@ -104,7 +104,7 @@ export default function CandidateForm({
                             width={36}
                             height={36}
                             alt={"Image of" + candidate.name}
-                            className="rounded-full"
+                            className="rounded"
                           ></Image>
                           <Input
                             type="text"
