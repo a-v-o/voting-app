@@ -6,6 +6,15 @@ const nextConfig: NextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "my-blob-store.public.blob.vercel-storage.com",
+        port: "",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

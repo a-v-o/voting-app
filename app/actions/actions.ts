@@ -1,9 +1,8 @@
 "use server";
 import dbConnect from "@/utils/db";
-import { promises as fs } from "fs";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { join } from "path";
+import { del, put } from "@vercel/blob";
 import { Admin, Candidate, Election, Voter } from "@/models/models";
 import { Types } from "mongoose";
 import { TVoter } from "@/utils/types";
@@ -183,12 +182,6 @@ export async function createNewCandidate(
   const electionName = formdata.get("election") as string;
   const candidatePicture = formdata.get("picture") as File;
 
-  const bytes = await candidatePicture.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const path = join(process.cwd(), "public", candidatePicture.name);
-
-  await fs.writeFile(path, buffer);
-
   if (!postName) {
     return { message: "Please select a post" };
   }
@@ -200,6 +193,11 @@ export async function createNewCandidate(
   if (candidatePicture.size == 0) {
     return { message: "Please select an image" };
   }
+
+  const blob = await put(candidatePicture.name, candidatePicture, {
+    access: "public",
+    addRandomSuffix: true,
+  });
 
   const election = await Election.findOne({
     name: electionName,
@@ -225,7 +223,7 @@ export async function createNewCandidate(
     post: postName,
     name: candidateName,
     votes: 0,
-    image: "/" + candidatePicture.name,
+    image: blob.url,
   });
 
   await newCandidate.save();
@@ -242,9 +240,10 @@ export async function createNewCandidate(
 export async function deleteCandidate(formdata: FormData) {
   await dbConnect();
   const electionName = formdata.get("electionName");
-  const candidate = formdata.get("candidate");
+  const candidateName = formdata.get("candidate");
 
   const election = await Election.findOne({ name: electionName });
+  const candidate = await Candidate.findOne({ name: electionName });
 
   if (!checkAdminAccess(election)) {
     redirect("/adminLogin");
@@ -252,9 +251,11 @@ export async function deleteCandidate(formdata: FormData) {
 
   await Election.updateOne(
     { name: electionName },
-    { $pull: { candidates: { name: candidate } } }
+    { $pull: { candidates: { name: candidateName } } }
   );
-  await Candidate.deleteOne({ name: candidate });
+
+  await del(candidate.image);
+  await Candidate.deleteOne({ name: candidateName });
   revalidatePath(`/editElection/${election._id}`);
 }
 
@@ -392,7 +393,15 @@ export async function deleteElection(
   prevState: { message: string } | undefined
 ) {
   await dbConnect();
+  const imagesToDelete = [];
   const election = await Election.findById(electionId).exec();
+  const candidates = await Candidate.find({
+    _id: { $in: election.candidates },
+  }).exec();
+
+  for (const candidate of candidates) {
+    imagesToDelete.push(candidate.image);
+  }
 
   if (!checkAdminAccess(election)) {
     return { message: "You do not have the right to edit this election" };
@@ -410,6 +419,7 @@ export async function deleteElection(
     _id: { $in: election.eligibleVoters },
   });
 
+  await del(imagesToDelete);
   await election.deleteOne().exec();
   redirect("/admin");
 }
