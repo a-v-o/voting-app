@@ -116,13 +116,15 @@ export default function CandidateForm({
                           className="w-full flex gap-3 justify-between items-center"
                           key={candidate.name}
                         >
-                          <Image
-                            src={candidate.image}
-                            width={36}
-                            height={36}
-                            alt={"Image of" + candidate.name}
-                            className="rounded shrink-0"
-                          ></Image>
+                          <div className="w-12 h-12 overflow-hidden rounded">
+                            <Image
+                              src={candidate.image}
+                              width={48}
+                              height={48}
+                              alt={"Image of" + candidate.name}
+                              style={{ objectFit: "cover" }}
+                            ></Image>
+                          </div>
                           <p className="outline-0 border-0">{candidate.name}</p>
                           <Input
                             type="hidden"
@@ -149,9 +151,10 @@ export default function CandidateForm({
                   })}
                 </div>
               </div>
-              <p className="text-red-600 text-center m-4">{deleteState?.message}</p>
+              <p className="text-red-600 text-center m-4">
+                {deleteState?.message}
+              </p>
             </form>
-
           );
         })}
       </div>
