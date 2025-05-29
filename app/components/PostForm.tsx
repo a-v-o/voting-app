@@ -5,6 +5,7 @@ import { createNewPost, deletePost } from "@/actions/actions";
 import { Button } from "@/components/ui/button";
 import { TElection } from "@/utils/types";
 import { Input } from "./ui/input";
+import { LoaderIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -12,7 +13,7 @@ const initialState = {
 
 export default function PostForm({ election }: { election: TElection }) {
   const [hidden, setHidden] = useState(true);
-  const [state, formAction] = useActionState(createNewPost, initialState);
+  const [state, formAction, pending] = useActionState(createNewPost, initialState);
 
   return (
     <div className="flex flex-col w-full">
@@ -30,7 +31,15 @@ export default function PostForm({ election }: { election: TElection }) {
           <label htmlFor="post">Post:</label>
           <Input type="text" name="post" id="post" />
           <Input type="hidden" name="election" value={election?.name} />
-          <Button>Add</Button>
+          <Button>
+            {pending ? (
+              <div className="animate-spin">
+                <LoaderIcon />
+              </div>
+            ) : (
+              "Add"
+            )}
+          </Button>{" "}
         </form>
         <p className="text-red-600 text-center m-4">{state?.message}</p>
       </div>

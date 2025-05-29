@@ -7,6 +7,7 @@ import { TElection } from "@/utils/types";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
+import { LoaderIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -14,7 +15,7 @@ const initialState = {
 
 export default function AddVoters({ election }: { election: TElection }) {
   const [hidden, setHidden] = useState(true);
-  const [state, formAction] = useActionState(addVoters, initialState);
+  const [state, formAction, pending] = useActionState(addVoters, initialState);
 
   return (
     <div className="flex flex-col w-full">
@@ -36,7 +37,15 @@ export default function AddVoters({ election }: { election: TElection }) {
             placeholder="Enter voters each separated by a comma"
           />
           <Input type="hidden" name="election" value={election?.name} />
-          <Button>Add</Button>
+          <Button>
+            {pending ? (
+              <div className="animate-spin">
+                <LoaderIcon />
+              </div>
+            ) : (
+              "Add"
+            )}
+          </Button>
         </form>
       </div>
       <p className="text-red-600 text-center m-4">{state?.message}</p>

@@ -9,6 +9,7 @@ import { TVoter } from "@/utils/types";
 import { checkAdminAccess, generateCode } from "@/utils/helpers";
 import bcrypt from "bcrypt";
 import { createSession, deleteSession, verifySession } from "@/utils/session";
+import nodemailer from "nodemailer";
 
 //done
 export async function checkEligibility(
@@ -242,8 +243,8 @@ export async function deleteCandidate(formdata: FormData) {
   const electionName = formdata.get("electionName");
   const candidateName = formdata.get("candidate");
 
-  const election = await Election.findOne({ name: electionName });
-  const candidate = await Candidate.findOne({ name: electionName });
+  const election = await Election.findOne({ name: electionName }).exec();
+  const candidate = await Candidate.findOne({ name: candidateName }).exec();
 
   if (!checkAdminAccess(election)) {
     redirect("/adminLogin");
@@ -347,7 +348,17 @@ export async function confirmElection(
   prevState: { message: string } | undefined
 ) {
   await dbConnect();
+
   const election = await Election.findById(electionId).exec();
+
+  const transport = nodemailer.createTransport({
+    host: "live.smtp.mailtrap.io",
+    port: 587,
+    auth: {
+      user: "api",
+      pass: process.env.MAILTRAP_TOKEN as string,
+    },
+  });
 
   if (!checkAdminAccess(election)) {
     return { message: "You do not have the right to edit this election" };
@@ -359,6 +370,21 @@ export async function confirmElection(
 
   if (election.eligibleVoters.length == 0) {
     return { message: "Add at least one voter" };
+  }
+
+  for (const voter of election.eligibleVoters) {
+    const message = {
+      from: "hi@demomailtrap.co",
+      to: voter.email,
+      subject: `You are eligible to vote in ${election.name}`,
+      text: `You are eligible to vote in the election ${election.name}. Your code is ${voter.code}. Please, keep it safe.`,
+    };
+    try {
+      await transport.sendMail(message);
+    } catch (error) {
+      console.error("Error sending email:", error);
+      return { message: "Error sending emails to voters" };
+    }
   }
 
   election.isLive = true;

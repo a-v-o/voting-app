@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LoaderIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -29,7 +30,10 @@ export default function CandidateForm({
 }) {
   const posts = election?.posts;
   const [hidden, setHidden] = useState(true);
-  const [state, formAction] = useActionState(createNewCandidate, initialState);
+  const [state, formAction, pending] = useActionState(
+    createNewCandidate,
+    initialState
+  );
 
   return (
     <div className="flex flex-col w-full">
@@ -71,7 +75,15 @@ export default function CandidateForm({
             id="picture"
           />
           <input type="hidden" name="election" value={election?.name} />
-          <Button>Add</Button>
+          <Button>
+            {pending ? (
+              <div className="animate-spin">
+                <LoaderIcon />
+              </div>
+            ) : (
+              "Add"
+            )}
+          </Button>
         </form>
       </div>
       <p className="text-red-600 text-center m-4">{state?.message}</p>
