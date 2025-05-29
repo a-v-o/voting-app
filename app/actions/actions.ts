@@ -238,7 +238,10 @@ export async function createNewCandidate(
 }
 
 //done
-export async function deleteCandidate(formdata: FormData) {
+export async function deleteCandidate(
+  prevState: { message: string } | undefined,
+  formdata: FormData
+) {
   await dbConnect();
   const electionId = new Types.ObjectId(formdata.get("election") as string);
   const candidateId = new Types.ObjectId(formdata.get("candidate") as string);
@@ -247,7 +250,7 @@ export async function deleteCandidate(formdata: FormData) {
   const candidate = await Candidate.findById(candidateId).exec();
 
   if (!checkAdminAccess(election)) {
-    redirect("/adminLogin");
+    return { message: "You cannot edit this election!" };
   }
 
   await Election.updateOne(

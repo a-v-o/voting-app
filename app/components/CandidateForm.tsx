@@ -35,6 +35,11 @@ export default function CandidateForm({
     initialState
   );
 
+  const [deleteState, deleteAction, deletePending] = useActionState(
+    deleteCandidate,
+    initialState
+  );
+
   return (
     <div className="flex flex-col w-full">
       <Button
@@ -93,7 +98,7 @@ export default function CandidateForm({
           return (
             <form
               key={post}
-              action={deleteCandidate}
+              action={deleteAction}
               className="w-full flex flex-col items-center gap-8"
             >
               <div className="w-full mt-4">
@@ -118,27 +123,35 @@ export default function CandidateForm({
                             alt={"Image of" + candidate.name}
                             className="rounded shrink-0"
                           ></Image>
+                          <p className="outline-0 border-0">{candidate.name}</p>
                           <Input
-                            type="text"
+                            type="hidden"
                             name="candidate"
-                            id={candidate.name}
                             value={candidate._id.toString()}
-                            readOnly={true}
-                            className="outline-0 border-0"
                           />
                           <Input
                             type="hidden"
                             name="election"
                             value={election._id.toString()}
                           />
-                          <Button>Delete</Button>
+                          <Button>
+                            {deletePending ? (
+                              <div className="animate-spin">
+                                <LoaderIcon />
+                              </div>
+                            ) : (
+                              "Delete"
+                            )}
+                          </Button>
                         </div>
                       );
                     }
                   })}
                 </div>
               </div>
+              <p className="text-red-600 text-center m-4">{deleteState?.message}</p>
             </form>
+
           );
         })}
       </div>
