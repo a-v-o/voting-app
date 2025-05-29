@@ -116,20 +116,20 @@ export default function CandidateForm({
                             width={36}
                             height={36}
                             alt={"Image of" + candidate.name}
-                            className="rounded"
+                            className="rounded shrink-0"
                           ></Image>
                           <Input
                             type="text"
                             name="candidate"
                             id={candidate.name}
-                            value={candidate.name}
+                            value={candidate._id.toString()}
                             readOnly={true}
                             className="outline-0 border-0"
                           />
                           <Input
                             type="hidden"
-                            name="electionName"
-                            value={election.name}
+                            name="election"
+                            value={election._id.toString()}
                           />
                           <Button>Delete</Button>
                         </div>

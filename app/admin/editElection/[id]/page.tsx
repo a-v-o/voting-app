@@ -30,7 +30,7 @@ export default async function Page({
   }
 
   return (
-    <div className="w-3/4 md:w-1/2 flex flex-col gap-6 items-center p-8">
+    <div className="w-5/6 md:w-1/2 flex flex-col gap-6 items-center p-8">
       <h1>{election?.name}</h1>
 
       <PostForm election={election} />

@@ -240,23 +240,23 @@ export async function createNewCandidate(
 //done
 export async function deleteCandidate(formdata: FormData) {
   await dbConnect();
-  const electionName = formdata.get("electionName");
-  const candidateName = formdata.get("candidate");
+  const electionId = new Types.ObjectId(formdata.get("election") as string);
+  const candidateId = new Types.ObjectId(formdata.get("candidate") as string);
 
-  const election = await Election.findOne({ name: electionName }).exec();
-  const candidate = await Candidate.findOne({ name: candidateName }).exec();
+  const election = await Election.findById(electionId).exec();
+  const candidate = await Candidate.findById(candidateId).exec();
 
   if (!checkAdminAccess(election)) {
     redirect("/adminLogin");
   }
 
   await Election.updateOne(
-    { name: electionName },
-    { $pull: { candidates: { name: candidateName } } }
+    { _id: electionId },
+    { $pull: { candidates: { _id: candidateId } } }
   );
 
   await del(candidate.image);
-  await Candidate.deleteOne({ name: candidateName });
+  await Candidate.deleteOne({ _id: candidateId });
   revalidatePath(`/editElection/${election._id}`);
 }
 
