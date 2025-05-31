@@ -351,15 +351,20 @@ export async function confirmElection(
   prevState: { message: string } | undefined
 ) {
   await dbConnect();
+  const successfulMails = [];
+  // const unsuccessfulMails = []
 
   const election = await Election.findById(electionId).exec();
 
   const transport = nodemailer.createTransport({
-    host: "live.smtp.mailtrap.io",
-    port: 587,
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: "api",
-      pass: process.env.MAILTRAP_TOKEN as string,
+      type: "OAuth2",
+      user: process.env.OAUTH_USER as string,
+      serviceClient: process.env.OAUTH_CLIENT as string,
+      privateKey: process.env.OAUTH_KEY as string,
     },
   });
 
@@ -377,15 +382,18 @@ export async function confirmElection(
 
   for (const voter of election.eligibleVoters) {
     const message = {
-      from: "hi@demomailtrap.co",
+      from: "Voting App",
       to: voter.email,
       subject: `You are eligible to vote in ${election.name}`,
       text: `You are eligible to vote in the election ${election.name}. Your code is ${voter.code}. Please, keep it safe.`,
     };
     try {
       await transport.sendMail(message);
+      successfulMails.push(voter.email);
     } catch (error) {
+      // unsuccessfulMails.push(voter.email);
       console.error("Error sending email:", error);
+      console.log(successfulMails);
       return { message: "Error sending emails to voters" };
     }
   }
