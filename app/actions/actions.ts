@@ -357,14 +357,10 @@ export async function confirmElection(
   const election = await Election.findById(electionId).exec();
 
   const transport = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    service:"gmail"
     auth: {
-      type: "OAuth2",
-      user: process.env.OAUTH_USER as string,
-      serviceClient: process.env.OAUTH_CLIENT as string,
-      privateKey: process.env.OAUTH_KEY as string,
+      user: "adejuwonvictor2004@gmail.com"
+      pass: "noyj fzcz ibot tqfv"
     },
   });
 
