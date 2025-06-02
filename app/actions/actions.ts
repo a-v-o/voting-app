@@ -359,8 +359,8 @@ export async function confirmElection(
   const transport = nodemailer.createTransport({
     service:"gmail",
     auth: {
-      user: process.ENV.EMAIL_ADDRESS as string,
-      pass: process.ENV.APP_PASSWORD as string
+      user: process.env.EMAIL_ADDRESS as string,
+      pass: process.env.APP_PASSWORD as string
     },
   });
 
