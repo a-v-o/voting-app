@@ -379,7 +379,7 @@ export async function confirmElection(
   for (const voter of election.eligibleVoters) {
     const message = {
       from: "Voting App",
-      to: voter.email,
+      to: "funmito2004@gmail.com",
       subject: `You are eligible to vote in ${election.name}`,
       text: `You are eligible to vote in the election ${election.name}. Your code is ${voter.code}. Please, keep it safe.`,
     };
