@@ -357,7 +357,7 @@ export async function confirmElection(
   const election = await Election.findById(electionId).exec();
 
   const transport = nodemailer.createTransport({
-    service:"gmail"
+    service:"gmail",
     auth: {
       user: "adejuwonvictor2004@gmail.com"
       pass: "noyj fzcz ibot tqfv"
