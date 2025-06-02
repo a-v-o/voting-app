@@ -359,8 +359,8 @@ export async function confirmElection(
   const transport = nodemailer.createTransport({
     service:"gmail",
     auth: {
-      user: "adejuwonvictor2004@gmail.com",
-      pass: "noyj fzcz ibot tqfv"
+      user: process.ENV.EMAIL_ADDRESS as string,
+      pass: process.ENV.APP_PASSWORD as string
     },
   });
 
@@ -376,10 +376,15 @@ export async function confirmElection(
     return { message: "Add at least one voter" };
   }
 
-  for (const voter of election.eligibleVoters) {
+  const voters = await Voter.find({
+    _id: {$in: election.eligibleVoters}
+  })
+                            
+  
+  for (const voter of voters) {
     const message = {
       from: "Voting App",
-      to: "funmito2004@gmail.com",
+      to: voter.email,
       subject: `You are eligible to vote in ${election.name}`,
       text: `You are eligible to vote in the election ${election.name}. Your code is ${voter.code}. Please, keep it safe.`,
     };
