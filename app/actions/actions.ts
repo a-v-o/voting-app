@@ -359,7 +359,7 @@ export async function confirmElection(
   const transport = nodemailer.createTransport({
     service:"gmail",
     auth: {
-      user: "adejuwonvictor2004@gmail.com"
+      user: "adejuwonvictor2004@gmail.com",
       pass: "noyj fzcz ibot tqfv"
     },
   });
