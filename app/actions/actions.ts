@@ -357,14 +357,10 @@ export async function confirmElection(
   const election = await Election.findById(electionId).exec();
 
   const transport = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    service:"gmail",
     auth: {
-      type: "OAuth2",
-      user: process.env.OAUTH_USER as string,
-      serviceClient: process.env.OAUTH_CLIENT as string,
-      privateKey: process.env.OAUTH_KEY as string,
+      user: process.env.EMAIL_ADDRESS as string,
+      pass: process.env.APP_PASSWORD as string
     },
   });
 
@@ -380,7 +376,12 @@ export async function confirmElection(
     return { message: "Add at least one voter" };
   }
 
-  for (const voter of election.eligibleVoters) {
+  const voters = await Voter.find({
+    _id: {$in: election.eligibleVoters}
+  })
+                            
+  
+  for (const voter of voters) {
     const message = {
       from: process.env.OAUTH_USER as string,
       to: voter.email,
