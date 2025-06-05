@@ -155,8 +155,6 @@ export async function deletePost(formdata: FormData) {
   const electionName = formdata.get("electionName");
   const postName = formdata.get("post");
 
-  console.log(postName);
-
   const election = await Election.findOne({ name: electionName }).exec();
 
   if (!checkAdminAccess(election)) {
@@ -169,6 +167,27 @@ export async function deletePost(formdata: FormData) {
   );
 
   await Candidate.deleteMany({ post: postName });
+  revalidatePath(`/editElection/${election._id}`);
+}
+
+export async function deleteVoter(formdata: FormData) {
+  await dbConnect();
+  const electionName = formdata.get("electionName");
+  const voter = formdata.get("voter") as string;
+  const voterId = new Types.ObjectId(voter);
+
+  const election = await Election.findOne({ name: electionName }).exec();
+
+  if (!checkAdminAccess(election)) {
+    redirect("/adminLogin");
+  }
+
+  await Election.updateOne(
+    { name: electionName },
+    { $pull: { eligibleVoters: voterId } }
+  );
+
+  await Voter.deleteOne({ _id: voterId });
   revalidatePath(`/editElection/${election._id}`);
 }
 
@@ -357,10 +376,10 @@ export async function confirmElection(
   const election = await Election.findById(electionId).exec();
 
   const transport = nodemailer.createTransport({
-    service:"gmail",
+    service: "gmail",
     auth: {
       user: process.env.EMAIL_ADDRESS as string,
-      pass: process.env.APP_PASSWORD as string
+      pass: process.env.APP_PASSWORD as string,
     },
   });
 
@@ -377,10 +396,9 @@ export async function confirmElection(
   }
 
   const voters = await Voter.find({
-    _id: {$in: election.eligibleVoters}
-  })
-                            
-  
+    _id: { $in: election.eligibleVoters },
+  });
+
   for (const voter of voters) {
     const message = {
       from: process.env.OAUTH_USER as string,

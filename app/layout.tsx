@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { NavBar } from "./components/NavBar";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
   title: "Voting App",
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-w-screen min-h-screen flex justify-center items-center">
+        <NextTopLoader />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

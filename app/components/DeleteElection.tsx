@@ -30,7 +30,7 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
   return (
     <div className="flex flex-col gap-4 items-center justify-center w-full">
       <AlertDialog>
-        <AlertDialogTrigger className="w-full">
+        <AlertDialogTrigger asChild className="w-full">
           <Button className="w-full">Delete Election</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
@@ -45,7 +45,7 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>
+            <AlertDialogAction asChild>
               <form action={formAction}>
                 <button>Confirm</button>
               </form>

@@ -13,7 +13,10 @@ const initialState = {
 
 export default function PostForm({ election }: { election: TElection }) {
   const [hidden, setHidden] = useState(true);
-  const [state, formAction, pending] = useActionState(createNewPost, initialState);
+  const [state, formAction, pending] = useActionState(
+    createNewPost,
+    initialState
+  );
 
   return (
     <div className="flex flex-col w-full">
@@ -50,15 +53,10 @@ export default function PostForm({ election }: { election: TElection }) {
           {election.posts.map((post, index) => {
             return (
               <form key={post} action={deletePost}>
-                <div className="flex items-center gap-3">
+                <div className="flex justify-between items-center gap-3">
                   <p>{index + 1}</p>
-                  <Input
-                    type="text"
-                    name="post"
-                    id={post}
-                    value={post}
-                    readOnly={true}
-                  />
+                  <p>{post}</p>
+                  <Input type="hidden" name="post" id={post} value={post} />
                   <Input
                     type="hidden"
                     name="electionName"

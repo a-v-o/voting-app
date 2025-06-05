@@ -1,14 +1,15 @@
-import AddVoters from "@/components/AddVoters";
+import VoterForm from "@/components/VoterForm";
 import CandidateForm from "@/components/CandidateForm";
 import { TElection } from "@/utils/types";
 import PostForm from "@/components/PostForm";
 import { notFound } from "next/navigation";
-import { Candidate, Election } from "@/models/models";
+import { Candidate, Election, Voter } from "@/models/models";
 import dbConnect from "@/utils/db";
 import { Types } from "mongoose";
 import ConfirmElection from "@/components/ConfirmElection";
 import DeleteElection from "@/components/DeleteElection";
 import StopElection from "@/components/StopElection";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function Page({
   params,
@@ -25,20 +26,39 @@ export default async function Page({
     _id: { $in: election.candidates },
   }).exec();
 
+  const voters = await Voter.find({
+    _id: { $in: election.eligibleVoters },
+  });
+
   if (!election) {
     notFound();
   }
 
   return (
-    <div className="w-[90%] md:w-1/2 flex flex-col gap-6 items-center p-8">
+    <div className="w-[90%] lg:w-2/3 flex flex-col gap-6 items-center p-8">
       <h1>{election?.name}</h1>
-
-      <PostForm election={election} />
-      <CandidateForm
-        election={election}
-        candidates={JSON.parse(JSON.stringify(candidates))}
-      />
-      <AddVoters election={election} />
+      <Tabs defaultValue="posts" className="w-full">
+        <TabsList className="grid grid-cols-3">
+          <TabsTrigger value="posts">Posts</TabsTrigger>
+          <TabsTrigger value="candidates">Canidates</TabsTrigger>
+          <TabsTrigger value="voters">Voters</TabsTrigger>
+        </TabsList>
+        <TabsContent value="posts">
+          <PostForm election={election} />
+        </TabsContent>
+        <TabsContent value="candidates">
+          <CandidateForm
+            election={election}
+            candidates={JSON.parse(JSON.stringify(candidates))}
+          />
+        </TabsContent>
+        <TabsContent value="voters">
+          <VoterForm
+            election={election}
+            voters={JSON.parse(JSON.stringify(voters))}
+          />
+        </TabsContent>
+      </Tabs>
       <div className="w-min flex flex-col gap-4 items-center">
         <ConfirmElection id={election._id} />
         <StopElection id={election._id} />
