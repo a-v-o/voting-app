@@ -28,10 +28,12 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
   );
 
   return (
-    <div className="flex flex-col gap-4 items-center justify-center w-full">
+    <div className="flex flex-col items-center justify-center w-full">
       <AlertDialog>
         <AlertDialogTrigger asChild className="w-full">
-          <Button className="w-full">Delete Election</Button>
+          <Button className="w-full" variant="destructive">
+            Delete Election
+          </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>

@@ -5,11 +5,12 @@ import { redirect } from "next/navigation";
 import { del, put } from "@vercel/blob";
 import { Admin, Candidate, Election, Voter } from "@/models/models";
 import { Types } from "mongoose";
-import { TVoter } from "@/utils/types";
+import { Sheet, TVoter } from "@/utils/types";
 import { checkAdminAccess, generateCode } from "@/utils/helpers";
 import bcrypt from "bcrypt";
 import { createSession, deleteSession, verifySession } from "@/utils/session";
 import nodemailer from "nodemailer";
+import * as XLSX from "xlsx";
 
 //done
 export async function checkEligibility(
@@ -283,7 +284,7 @@ export async function deleteCandidate(
 }
 
 //done
-export async function addVoters(
+export async function addVotersByText(
   prevState: { message: string } | undefined,
   formdata: FormData
 ) {
@@ -309,6 +310,53 @@ export async function addVoters(
       code: generateCode(9),
       voted: false,
     });
+    await newVoter.save();
+    election.eligibleVoters.push(newVoter._id);
+  }
+
+  await election.save();
+  revalidatePath(`/editElection/${election._id}`);
+}
+
+//done
+export async function addVotersByUpload(
+  prevState: { message: string } | undefined,
+  formdata: FormData
+) {
+  await dbConnect();
+  const voterFile = formdata.get("voterFile") as File;
+
+  if (voterFile.size == 0) {
+    return { message: "Please upload a file" };
+  }
+
+  if (!voterFile.name.endsWith(".xlsx")) {
+    return { message: "Please upload a valid .xlsx file" };
+  }
+
+  const electionName = formdata.get("election") as string;
+  const election = await Election.findOne({ name: electionName }).exec();
+
+  if (!checkAdminAccess(election)) {
+    return { message: "You do not have the right to edit this election" };
+  }
+
+  const data = await voterFile.arrayBuffer();
+  const workbook = XLSX.read(data);
+  const parsedSheet: Sheet[] = XLSX.utils.sheet_to_json(
+    workbook.Sheets[workbook.SheetNames[0]],
+    { header: "A" }
+  );
+
+  console.log(parsedSheet);
+
+  for (const entry of parsedSheet) {
+    const newVoter = new Voter({
+      email: entry["A"].trim().toLowerCase(),
+      code: generateCode(9),
+      voted: false,
+    });
+
     await newVoter.save();
     election.eligibleVoters.push(newVoter._id);
   }

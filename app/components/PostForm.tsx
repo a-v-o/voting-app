@@ -29,7 +29,7 @@ export default function PostForm({ election }: { election: TElection }) {
         Add Post
       </Button>
 
-      <div className={hidden ? "hidden" : "flex flex-col"}>
+      <div className={hidden ? "hidden" : "flex flex-col gap-4"}>
         <form action={formAction} className="flex flex-col gap-2 w-full">
           <label htmlFor="post">Post:</label>
           <Input type="text" name="post" id="post" />

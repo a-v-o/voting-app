@@ -1,7 +1,11 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { addVoters, deleteVoter } from "@/actions/actions";
+import {
+  addVotersByText,
+  addVotersByUpload,
+  deleteVoter,
+} from "@/actions/actions";
 import { Button } from "@/components/ui/button";
 import { TElection, TVoter } from "@/utils/types";
 import { Label } from "./ui/label";
@@ -21,7 +25,14 @@ export default function AddVoters({
   voters: TVoter[];
 }) {
   const [hidden, setHidden] = useState(true);
-  const [state, formAction, pending] = useActionState(addVoters, initialState);
+  const [textState, textFormAction, textPending] = useActionState(
+    addVotersByText,
+    initialState
+  );
+  const [uploadState, uploadFormAction, uploadPending] = useActionState(
+    addVotersByUpload,
+    initialState
+  );
 
   return (
     <div className="flex flex-col w-full">
@@ -34,17 +45,18 @@ export default function AddVoters({
         Add Voters
       </Button>
 
-      <div className={hidden ? "hidden" : "flex"}>
-        <form action={formAction} className="flex flex-col gap-2 w-full">
+      <div className={hidden ? "hidden" : "flex flex-col gap-8"}>
+        <form action={textFormAction} className="flex flex-col gap-4 w-full">
           <Label htmlFor="voters">Voters:</Label>
           <Textarea
             name="voters"
             id="voters"
             placeholder="Enter voters each separated by a comma"
+            className="min-h-32"
           />
           <Input type="hidden" name="election" value={election?.name} />
           <Button>
-            {pending ? (
+            {textPending ? (
               <div className="animate-spin">
                 <LoaderIcon />
               </div>
@@ -53,8 +65,29 @@ export default function AddVoters({
             )}
           </Button>
         </form>
+
+        {textState?.message && (
+          <p className="text-red-600 text-center m-4">{textState?.message}</p>
+        )}
+
+        <form className="flex flex-col gap-2 w-full" action={uploadFormAction}>
+          <Label htmlFor="voterFile">Upload Voters (Excel File):</Label>
+          <div className="flex items-center gap-2">
+            <Input id="voterFile" name="voterFile" type="file" accept=".xlsx" />
+            <Input type="hidden" name="election" value={election?.name} />
+            <Button>
+              {uploadPending ? (
+                <div className="animate-spin">
+                  <LoaderIcon />
+                </div>
+              ) : (
+                "Upload"
+              )}
+            </Button>{" "}
+          </div>
+        </form>
       </div>
-      <p className="text-red-600 text-center m-4">{state?.message}</p>
+      <p className="text-red-600 text-center m-4">{uploadState?.message}</p>
       <div className="w-full flex flex-col gap-4">
         {voters.map((voter, index) => {
           return (
@@ -63,7 +96,7 @@ export default function AddVoters({
               action={deleteVoter}
               className="w-full"
             >
-              <div className="w-full flex justify-between items-center gap-3">
+              <div className="w-full grid grid-cols-[48px_1fr_auto] gap-3">
                 <p>{index + 1}</p>
                 <p>{voter.email}</p>
 

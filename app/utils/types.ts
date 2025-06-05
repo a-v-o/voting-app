@@ -42,3 +42,7 @@ export type Entry = {
 export type Chart = {
   [post: string]: Entry[];
 };
+
+export type Sheet = {
+  [column: string]: string;
+};

@@ -37,7 +37,7 @@ export default async function Page({
   return (
     <div className="w-[90%] lg:w-2/3 flex flex-col gap-6 items-center p-8">
       <h1>{election?.name}</h1>
-      <Tabs defaultValue="posts" className="w-full">
+      <Tabs defaultValue="posts" className="w-full flex flex-col gap-4">
         <TabsList className="grid grid-cols-3">
           <TabsTrigger value="posts">Posts</TabsTrigger>
           <TabsTrigger value="candidates">Canidates</TabsTrigger>
@@ -59,7 +59,7 @@ export default async function Page({
           />
         </TabsContent>
       </Tabs>
-      <div className="w-min flex flex-col gap-4 items-center">
+      <div className="w-min flex gap-4 justify-center items-center mt-8">
         <ConfirmElection id={election._id} />
         <StopElection id={election._id} />
         <DeleteElection id={election._id} />
