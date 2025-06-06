@@ -37,7 +37,7 @@ export default async function SelectElection({
       <Search />
       {queriedElections.map((election) => {
         return (
-          <Button variant="outline" key={election._id.toString()}>
+          <Button variant="outline" asChild key={election._id.toString()}>
             <Link href={`/admin/editElection/${election._id}`}>
               <p>{election.name}</p>
             </Link>

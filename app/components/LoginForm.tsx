@@ -27,7 +27,7 @@ export default function LoginForm({
     initialState
   );
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("p-8 flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>

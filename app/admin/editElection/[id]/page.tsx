@@ -6,9 +6,6 @@ import { notFound } from "next/navigation";
 import { Candidate, Election, Voter } from "@/models/models";
 import dbConnect from "@/utils/db";
 import { Types } from "mongoose";
-import ConfirmElection from "@/components/ConfirmElection";
-import DeleteElection from "@/components/DeleteElection";
-import StopElection from "@/components/StopElection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function Page({
@@ -59,11 +56,6 @@ export default async function Page({
           />
         </TabsContent>
       </Tabs>
-      <div className="w-min flex flex-col md:flex-row gap-4 justify-center items-center mt-8">
-        <ConfirmElection id={election._id} />
-        <StopElection id={election._id} />
-        <DeleteElection id={election._id} />
-      </div>
     </div>
   );
 }

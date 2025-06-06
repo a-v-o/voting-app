@@ -6,8 +6,6 @@ input {
   border: #0a0a0a solid 2px;
 }
 
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
