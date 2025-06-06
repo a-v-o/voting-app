@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useActionState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { LoaderIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -23,15 +22,7 @@ export default function CreateElection() {
         <form action={formAction} className="flex flex-col gap-2">
           <Label htmlFor="electionName">Election Name:</Label>
           <Input type="text" name="electionName" id="electionName" />
-          <Button>
-            {pending ? (
-              <div className="animate-spin">
-                <LoaderIcon />
-              </div>
-            ) : (
-              "New Election"
-            )}
-          </Button>
+          <Button pending={pending}>New Election</Button>
         </form>
       </div>
       <p className="text-red-500">{state.message}</p>

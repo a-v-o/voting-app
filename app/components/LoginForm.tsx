@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useActionState } from "react";
 import { checkEligibility } from "../actions/actions";
-import { LoaderIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -74,14 +73,8 @@ export default function LoginForm({
               </div>
             </div>
             <p className="text-center text-red-600">{state?.message}</p>
-            <Button type="submit" className="w-full">
-              {pending ? (
-                <div className="animate-spin">
-                  <LoaderIcon />
-                </div>
-              ) : (
-                "Proceed"
-              )}
+            <Button type="submit" className="w-full" pending={pending}>
+              Login
             </Button>
           </form>
         </CardContent>

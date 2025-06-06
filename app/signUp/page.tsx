@@ -47,8 +47,8 @@ export default function Page() {
               </div>
             </div>
             <p className="text-center text-red-600">{state?.message}</p>
-            <Button type="submit" className="w-full mt-4">
-              {pending ? "Submitting..." : "Proceed"}
+            <Button type="submit" className="w-full mt-4" pending={pending}>
+              Proceed
             </Button>
           </form>
         </CardContent>

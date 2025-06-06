@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LoaderIcon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 
 const initialState = {
   message: "",
@@ -41,122 +41,131 @@ export default function CandidateForm({
   );
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full gap-4">
       <Button
-        className="mb-4"
+        className="mb-4 w-max self-center"
         onClick={() => {
           setHidden(!hidden);
         }}
+        variant="outline"
       >
         Add Candidate
       </Button>
 
-      <div className={hidden ? "hidden" : "flex"}>
-        <form action={formAction} className="flex flex-col gap-2 w-full">
-          <Select name="post">
-            <SelectTrigger>
-              <SelectValue placeholder="Select post" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Posts</SelectLabel>
-                {posts &&
-                  posts.map((post) => {
-                    return (
-                      <SelectItem key={post} value={post}>
-                        {post}
-                      </SelectItem>
-                    );
-                  })}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Label htmlFor="candidate">Candidate Name:</Label>
-          <Input type="text" name="candidate" id="candidate" />
-          <Input
-            type="file"
-            accept="image/png, image/gif, image/jpeg"
-            name="picture"
-            id="picture"
-          />
-          <input type="hidden" name="election" value={election?.name} />
-          <Button>
-            {pending ? (
-              <div className="animate-spin">
-                <LoaderIcon />
-              </div>
-            ) : (
-              "Add"
-            )}
-          </Button>
-        </form>
-      </div>
-      <p className="text-red-600 text-center m-4">{state?.message}</p>
-      <h2>Candidates:</h2>
-      <div>
-        {election?.posts.map((post) => {
-          return (
-            <form
-              key={post}
-              action={deleteAction}
-              className="w-full flex flex-col items-center gap-8"
+      <AnimatePresence>
+        {!hidden && (
+          <div className="flex flex-col gap-4 overflow-hidden">
+            <motion.form
+              initial={{ y: -150 }}
+              animate={{ y: 0 }}
+              exit={{ y: -300 }}
+              transition={{
+                ease: "easeOut",
+              }}
+              action={formAction}
+              className="flex flex-col gap-4 w-full"
             >
-              <div className="w-full mt-4">
-                <h1
-                  className="capitalize mb-3 text-center font-bold"
-                  key={post}
-                >
-                  {post.toUpperCase()}
-                </h1>
-                <div className="flex flex-col gap-4 w-full">
-                  {candidates.map((candidate) => {
-                    if (candidate.post.toLowerCase() == post.toLowerCase()) {
-                      return (
-                        <div
-                          className="w-full flex gap-3 justify-between items-center"
-                          key={candidate.name}
-                        >
-                          <div className="w-12 h-12 overflow-hidden rounded">
-                            <Image
-                              src={candidate.image}
-                              width={48}
-                              height={48}
-                              alt={"Image of" + candidate.name}
-                              style={{ objectFit: "cover" }}
-                            ></Image>
+              <Select name="post">
+                <SelectTrigger>
+                  <SelectValue placeholder="Select post" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Posts</SelectLabel>
+                    {posts &&
+                      posts.map((post) => {
+                        return (
+                          <SelectItem key={post} value={post}>
+                            {post}
+                          </SelectItem>
+                        );
+                      })}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <Label htmlFor="candidate">Candidate Name:</Label>
+              <Input type="text" name="candidate" id="candidate" />
+              <Input
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+                name="picture"
+                id="picture"
+              />
+              <input type="hidden" name="election" value={election?.name} />
+              <Button className="w-max self-center" pending={pending}>
+                Add
+              </Button>
+            </motion.form>
+            <p className="text-red-600 text-center m-4">{state?.message}</p>
+          </div>
+        )}
+      </AnimatePresence>
+      <div>
+        <h2>Candidates:</h2>
+        <div>
+          {election?.posts.map((post) => {
+            return (
+              <form
+                key={post}
+                action={deleteAction}
+                className="w-full flex flex-col items-center gap-8"
+              >
+                <div className="w-full mt-4">
+                  <p
+                    className="capitalize mb-3 text-center text-xl font-semibold"
+                    key={post}
+                  >
+                    {post.toUpperCase()}
+                  </p>
+                  <div className="flex flex-col gap-4 w-full">
+                    {candidates.map((candidate) => {
+                      if (candidate.post.toLowerCase() == post.toLowerCase()) {
+                        return (
+                          <div
+                            className="w-full flex gap-3 justify-between items-center"
+                            key={candidate.name}
+                          >
+                            <div className="w-12 h-12 overflow-hidden rounded">
+                              <Image
+                                src={candidate.image}
+                                width={48}
+                                height={48}
+                                alt={"Image of" + candidate.name}
+                                style={{ objectFit: "cover" }}
+                              ></Image>
+                            </div>
+                            <p className="outline-0 border-0">
+                              {candidate.name}
+                            </p>
+                            <Input
+                              type="hidden"
+                              name="candidate"
+                              value={candidate._id.toString()}
+                            />
+                            <Input
+                              type="hidden"
+                              name="election"
+                              value={election._id.toString()}
+                            />
+                            <Button
+                              pending={deletePending}
+                              variant="destructive"
+                            >
+                              Delete
+                            </Button>
                           </div>
-                          <p className="outline-0 border-0">{candidate.name}</p>
-                          <Input
-                            type="hidden"
-                            name="candidate"
-                            value={candidate._id.toString()}
-                          />
-                          <Input
-                            type="hidden"
-                            name="election"
-                            value={election._id.toString()}
-                          />
-                          <Button>
-                            {deletePending ? (
-                              <div className="animate-spin">
-                                <LoaderIcon />
-                              </div>
-                            ) : (
-                              "Delete"
-                            )}
-                          </Button>
-                        </div>
-                      );
-                    }
-                  })}
+                        );
+                      }
+                    })}
+                  </div>
                 </div>
-              </div>
-              <p className="text-red-600 text-center m-4">
-                {deleteState?.message}
-              </p>
-            </form>
-          );
-        })}
+                <p className="text-red-600 text-center m-4">
+                  {deleteState?.message}
+                </p>
+              </form>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

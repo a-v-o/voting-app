@@ -5,7 +5,6 @@ import { TCandidate, TElection } from "@/utils/types";
 import Image from "next/image";
 import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
-import { LoaderIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -71,14 +70,8 @@ export default function VotingPage({
           </div>
         );
       })}
-      <Button>
-        {pending ? (
-          <div>
-            <LoaderIcon />
-          </div>
-        ) : (
-          "Submit Votes"
-        )}
+      <Button pending={pending}>
+        Submit Votes
       </Button>
       <p>{state?.message}</p>
     </form>

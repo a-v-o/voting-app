@@ -40,7 +40,7 @@ export default async function Page({
       <Tabs defaultValue="posts" className="w-full flex flex-col gap-4">
         <TabsList className="grid grid-cols-3">
           <TabsTrigger value="posts">Posts</TabsTrigger>
-          <TabsTrigger value="candidates">Canidates</TabsTrigger>
+          <TabsTrigger value="candidates">Candidates</TabsTrigger>
           <TabsTrigger value="voters">Voters</TabsTrigger>
         </TabsList>
         <TabsContent value="posts">
@@ -59,7 +59,7 @@ export default async function Page({
           />
         </TabsContent>
       </Tabs>
-      <div className="w-min flex gap-4 justify-center items-center mt-8">
+      <div className="w-min flex flex-col md:flex-row gap-4 justify-center items-center mt-8">
         <ConfirmElection id={election._id} />
         <StopElection id={election._id} />
         <DeleteElection id={election._id} />

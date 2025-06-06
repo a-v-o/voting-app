@@ -11,7 +11,7 @@ import { TElection, TVoter } from "@/utils/types";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
-import { LoaderIcon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 
 const initialState = {
   message: "",
@@ -35,60 +35,74 @@ export default function AddVoters({
   );
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full gap-4">
       <Button
-        className="mb-4"
+        className="mb-4 w-max self-center"
         onClick={() => {
           setHidden(!hidden);
         }}
+        variant="outline"
       >
         Add Voters
       </Button>
 
-      <div className={hidden ? "hidden" : "flex flex-col gap-8"}>
-        <form action={textFormAction} className="flex flex-col gap-4 w-full">
-          <Label htmlFor="voters">Voters:</Label>
-          <Textarea
-            name="voters"
-            id="voters"
-            placeholder="Enter voters each separated by a comma"
-            className="min-h-32"
-          />
-          <Input type="hidden" name="election" value={election?.name} />
-          <Button>
-            {textPending ? (
-              <div className="animate-spin">
-                <LoaderIcon />
-              </div>
-            ) : (
-              "Add"
+      <AnimatePresence>
+        {!hidden && (
+          <div className="flex flex-col gap-8 overflow-hidden">
+            <motion.form
+              initial={{ y: -150 }}
+              animate={{ y: 0 }}
+              exit={{ y: -350 }}
+              transition={{
+                ease: "easeOut",
+              }}
+              action={textFormAction}
+              className="flex flex-col gap-4 w-full"
+            >
+              <Label htmlFor="voters">Voters:</Label>
+              <Textarea
+                name="voters"
+                id="voters"
+                placeholder="Enter voters each separated by a comma"
+                className="min-h-32"
+              />
+              <Input type="hidden" name="election" value={election?.name} />
+              <Button className="w-max self-center" pending={textPending}>
+                Add
+              </Button>
+            </motion.form>
+
+            {textState?.message && (
+              <p className="text-red-600 text-center m-4">
+                {textState?.message}
+              </p>
             )}
-          </Button>
-        </form>
 
-        {textState?.message && (
-          <p className="text-red-600 text-center m-4">{textState?.message}</p>
-        )}
-
-        <form className="flex flex-col gap-2 w-full" action={uploadFormAction}>
-          <Label htmlFor="voterFile">Upload Voters (Excel File):</Label>
-          <div className="flex items-center gap-2">
-            <Input id="voterFile" name="voterFile" type="file" accept=".xlsx" />
-            <Input type="hidden" name="election" value={election?.name} />
-            <Button>
-              {uploadPending ? (
-                <div className="animate-spin">
-                  <LoaderIcon />
-                </div>
-              ) : (
-                "Upload"
-              )}
-            </Button>{" "}
+            <form
+              className="flex flex-col gap-2 w-full"
+              action={uploadFormAction}
+            >
+              <Input type="hidden" name="election" value={election?.name} />
+              <Label htmlFor="voterFile">Upload Voters (Excel File):</Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  id="voterFile"
+                  name="voterFile"
+                  type="file"
+                  accept=".xlsx"
+                />
+                <Button pending={uploadPending}>Upload</Button>{" "}
+              </div>
+            </form>
+            <p className="text-red-600 text-center m-4">
+              {uploadState?.message}
+            </p>
           </div>
-        </form>
-      </div>
-      <p className="text-red-600 text-center m-4">{uploadState?.message}</p>
+        )}
+      </AnimatePresence>
+
       <div className="w-full flex flex-col gap-4">
+        <h2>Voters:</h2>
         {voters.map((voter, index) => {
           return (
             <form
@@ -96,9 +110,9 @@ export default function AddVoters({
               action={deleteVoter}
               className="w-full"
             >
-              <div className="w-full grid grid-cols-[48px_1fr_auto] gap-3">
+              <div className="grid grid-cols-[48px_minmax(0,1fr)_auto] gap-3">
                 <p>{index + 1}</p>
-                <p>{voter.email}</p>
+                <p className="overflow-auto">{voter.email}</p>
 
                 <Input
                   type="hidden"
@@ -111,7 +125,7 @@ export default function AddVoters({
                   name="electionName"
                   value={election.name}
                 />
-                <Button>Delete</Button>
+                <Button variant="destructive">Delete</Button>
               </div>
             </form>
           );

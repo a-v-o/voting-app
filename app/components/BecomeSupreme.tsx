@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { becomeSupreme } from "@/actions/actions";
 import { useActionState } from "react";
-import { LoaderIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -59,14 +58,8 @@ export default function BecomeSupreme() {
               </div>
             </div>
             <p className="text-center text-red-600">{state?.message}</p>
-            <Button type="submit" className="w-full mt-4">
-              {pending ? (
-                <div className="animate-spin">
-                  <LoaderIcon />
-                </div>
-              ) : (
-                "Proceed"
-              )}
+            <Button type="submit" className="w-full mt-4" pending={pending}>
+              Become Supreme
             </Button>
           </form>
         </CardContent>

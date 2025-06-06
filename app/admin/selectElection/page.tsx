@@ -1,4 +1,5 @@
 import Search from "@/components/Search";
+import { Button } from "@/components/ui/button";
 import { Admin, Election } from "@/models/models";
 import dbConnect from "@/utils/db";
 import { verifySession } from "@/utils/session";
@@ -36,14 +37,11 @@ export default async function SelectElection({
       <Search />
       {queriedElections.map((election) => {
         return (
-          <div
-            key={election._id.toString()}
-            className="border p-2 rounded hover:bg-secondary"
-          >
+          <Button variant="outline" key={election._id.toString()}>
             <Link href={`/admin/editElection/${election._id}`}>
               <p>{election.name}</p>
             </Link>
-          </div>
+          </Button>
         );
       })}
     </div>

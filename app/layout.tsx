@@ -3,10 +3,12 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { NavBar } from "./components/NavBar";
 import NextTopLoader from "nextjs-toploader";
+import { Inter } from "next/font/google";
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Voting App",
-  description: "A voting app",
+  description: "A voting app built by Adejuwon Oluwafunmito",
 };
 
 export default function RootLayout({
@@ -15,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="min-w-screen min-h-screen flex justify-center items-center">
+    <html lang="en" suppressHydrationWarning className={inter.className}>
+      <body className="min-w-screen min-h-screen flex justify-center items-center ">
         <NextTopLoader showSpinner={false} />
         <ThemeProvider
           attribute="class"
