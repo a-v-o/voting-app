@@ -256,13 +256,12 @@ export async function createNewCandidate(
     extraFields: extraFieldsArray,
   });
 
-  console.log(newCandidate.extraFields);
-
   await newCandidate.save();
+  console.log(newCandidate.extraFields);
 
   await Election.updateOne(
     { name: electionName },
-    { $push: { candidates: { $each: [newCandidate._id] } } }
+    { $push: { candidates: newCandidate._id } }
   );
 
   revalidatePath(`/editElection/${election._id}`);

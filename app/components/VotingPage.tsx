@@ -31,7 +31,7 @@ export default function VotingPage({
   return (
     <form
       action={formAction}
-      className="w-full flex flex-col items-center gap-8 p-8 mt-4"
+      className="w-full flex flex-col items-center gap-8 p-8 mt-8"
     >
       {election?.posts.map((post) => {
         return (
