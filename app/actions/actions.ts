@@ -200,6 +200,8 @@ export async function createNewCandidate(
     extraFieldsArray.push(extraField);
   }
 
+  console.log(extraFieldsArray)
+
   if (!postName) {
     return { message: "Please select a post" };
   }
@@ -243,6 +245,7 @@ export async function createNewCandidate(
     extraFields: extraFieldsArray,
   });
 
+  console.log(newCandidate.name)
   await newCandidate.save();
   console.log(newCandidate.extraFields);
 
