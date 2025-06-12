@@ -22,6 +22,7 @@ export type TCandidate = {
   name: string;
   image: string;
   votes: number;
+  extraFields: Field[];
 };
 
 export type TElection = {
@@ -45,4 +46,8 @@ export type Chart = {
 
 export type Sheet = {
   [column: string]: string;
+};
+
+export type Field = {
+  [key: string]: string | number;
 };

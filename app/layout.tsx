@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.className}>
-      <body className="min-w-screen min-h-screen flex justify-center items-center overflow-scroll">
+      <body className="min-w-screen min-h-screen flex justify-center items-center overflow-y-scroll">
         <NextTopLoader showSpinner={false} />
         <ThemeProvider
           attribute="class"

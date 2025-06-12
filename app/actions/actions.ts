@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { del, put } from "@vercel/blob";
 import { Admin, Candidate, Election, Voter } from "@/models/models";
 import { Types } from "mongoose";
-import { Sheet, TVoter } from "@/utils/types";
+import { Field, Sheet, TVoter } from "@/utils/types";
 import { checkAdminAccess, generateCode } from "@/utils/helpers";
 import bcrypt from "bcrypt";
 import { createSession, deleteSession, verifySession } from "@/utils/session";
@@ -194,6 +194,7 @@ export async function deleteVoter(formdata: FormData) {
 
 //done
 export async function createNewCandidate(
+  extraFields: string[],
   prevState: { message: string } | undefined,
   formdata: FormData
 ) {
@@ -202,6 +203,15 @@ export async function createNewCandidate(
   const candidateName = formdata.get("candidate") as string;
   const electionName = formdata.get("election") as string;
   const candidatePicture = formdata.get("picture") as File;
+  const extraFieldsArray = [];
+
+  for (const field of extraFields) {
+    const extraField: Field = {};
+    const fieldValue = formdata.get(field) as string;
+    extraField["name"] = field;
+    extraField["value"] = fieldValue;
+    extraFieldsArray.push(extraField);
+  }
 
   if (!postName) {
     return { message: "Please select a post" };
@@ -233,8 +243,6 @@ export async function createNewCandidate(
   }).exec();
 
   for (const candidate of candidates) {
-    console.log(candidate);
-
     if (candidate.name.toLowerCase() == candidateName.toLowerCase()) {
       return { message: "Candidate already exists" };
     }
@@ -245,7 +253,10 @@ export async function createNewCandidate(
     name: candidateName,
     votes: 0,
     image: blob.url,
+    extraFields: extraFieldsArray,
   });
+
+  console.log(newCandidate.extraFields);
 
   await newCandidate.save();
 
@@ -452,7 +463,7 @@ export async function confirmElection(
       from: process.env.OAUTH_USER as string,
       to: voter.email,
       subject: `You are eligible to vote in ${election.name}`,
-      text: `You are eligible to vote in the election ${election.name}. Your code is ${voter.code}. Please, keep it safe.`,
+      text: `You are eligible to vote in the election ${election.name}. The election code is ${election.code}. Your code for this election is ${voter.code}. Please, keep it safe.`,
     };
     try {
       await transport.sendMail(message);

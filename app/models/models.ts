@@ -15,6 +15,7 @@ const candidateSchema = new Schema({
   name: String,
   image: String,
   votes: Number,
+  extraFields: [Object],
 });
 
 export const Candidate =

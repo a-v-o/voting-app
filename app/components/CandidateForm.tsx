@@ -1,6 +1,6 @@
 "use client";
 import { TCandidate, TElection } from "@/utils/types";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { createNewCandidate, deleteCandidate } from "@/actions/actions";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -32,15 +32,30 @@ export default function CandidateForm({
   const duration = 0.2;
   const posts = election?.posts;
   const [hidden, setHidden] = useState(true);
+  const [extraFieldHidden, setExtraFieldHidden] = useState(true);
+  const [field, setField] = useState("");
+  const [extraFields, setExtraFields] = useState<string[]>([]);
+  const createNewCandidateWithExtraFields = createNewCandidate.bind(
+    null,
+    extraFields
+  );
+
   const [state, formAction, pending] = useActionState(
-    createNewCandidate,
+    createNewCandidateWithExtraFields,
     initialState
   );
 
-  const [deleteState, deleteAction, deletePending] = useActionState(
+  const [deleteState, deleteAction] = useActionState(
     deleteCandidate,
     initialState
   );
+
+  useEffect(() => {
+    const extraFieldsFromStorage = localStorage.getItem("extraFields");
+    if (extraFieldsFromStorage)
+      setExtraFields(JSON.parse(extraFieldsFromStorage));
+    console.log(extraFieldsFromStorage);
+  }, []);
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -65,7 +80,7 @@ export default function CandidateForm({
                 ease: "linear",
                 duration: duration,
               }}
-              className="flex flex-col gap-8 overflow-hidden"
+              className="flex flex-col gap-4 overflow-hidden"
             >
               <form action={formAction} className="flex flex-col gap-4 w-full">
                 <Select name="post">
@@ -94,12 +109,80 @@ export default function CandidateForm({
                   name="picture"
                   id="picture"
                 />
+                {extraFields.map((field) => {
+                  return (
+                    <div
+                      key={field}
+                      className="flex items-end justify-between gap-4"
+                    >
+                      <div className="w-full">
+                        <Label htmlFor={field}>{field}</Label>
+                        <Input type="text" name={field} id={field} />
+                      </div>
+                      <Button
+                        variant="destructive"
+                        onClick={() => {
+                          const newExtraFields = extraFields.filter(
+                            (fieldName) => fieldName != field
+                          );
+                          localStorage.setItem(
+                            "extraFields",
+                            JSON.stringify(newExtraFields)
+                          );
+                          setExtraFields(newExtraFields);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  );
+                })}
                 <input type="hidden" name="election" value={election?.name} />
                 <Button className="w-max self-center" pending={pending}>
                   Add
                 </Button>
+                {state?.message && (
+                  <p className="text-red-600 text-center m-4">
+                    {state?.message}
+                  </p>
+                )}
               </form>
-              <p className="text-red-600 text-center m-4">{state?.message}</p>
+
+              <Button
+                className="mb-4 w-max self-center"
+                onClick={() => {
+                  setExtraFieldHidden(!extraFieldHidden);
+                }}
+                variant="outline"
+              >
+                Add Field
+              </Button>
+
+              {!extraFieldHidden && (
+                <div className="flex gap-4 items-center">
+                  <Input
+                    type="text"
+                    name="extraField"
+                    id="extraField"
+                    onChange={(e) => {
+                      setField(e.target.value);
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      if (field == "") return;
+                      if (extraFields.includes(field)) return;
+                      localStorage.setItem(
+                        "extraFields",
+                        JSON.stringify([...extraFields, field])
+                      );
+                      setExtraFields([...extraFields, field]);
+                    }}
+                  >
+                    Add
+                  </Button>
+                </div>
+              )}
             </motion.div>
           )}
         </div>
@@ -111,9 +194,8 @@ export default function CandidateForm({
           <div>
             {election?.posts.map((post) => {
               return (
-                <form
+                <div
                   key={post}
-                  action={deleteAction}
                   className="w-full flex flex-col items-center gap-8"
                 >
                   <div className="w-full mt-4">
@@ -129,7 +211,8 @@ export default function CandidateForm({
                           candidate.post.toLowerCase() == post.toLowerCase()
                         ) {
                           return (
-                            <div
+                            <form
+                              action={deleteAction}
                               className="w-full flex gap-3 justify-between items-center"
                               key={candidate.name}
                             >
@@ -155,13 +238,8 @@ export default function CandidateForm({
                                 name="election"
                                 value={election._id.toString()}
                               />
-                              <Button
-                                pending={deletePending}
-                                variant="destructive"
-                              >
-                                Delete
-                              </Button>
-                            </div>
+                              <Button variant="destructive">Delete</Button>
+                            </form>
                           );
                         }
                       })}
@@ -170,7 +248,7 @@ export default function CandidateForm({
                   <p className="text-red-600 text-center m-4">
                     {deleteState?.message}
                   </p>
-                </form>
+                </div>
               );
             })}
           </div>
