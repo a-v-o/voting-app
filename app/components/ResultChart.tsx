@@ -32,12 +32,12 @@ export default function ResultChart({ chartData }: { chartData: Chart[] }) {
         const key = Object.keys(chart)[0];
         return (
           chart[key].length != 0 && (
-            <div className="flex flex-col items-center p-4">
+            <div key={key} className="flex flex-col items-center p-4">
               <h1 className="mb-4">{key}</h1>
               <ChartContainer
                 key={key}
                 config={chartConfig}
-                className="min-h-[200px] w-full min-w-[480px]"
+                className="min-h-[200px] w-full md:min-w-[480px]"
               >
                 <BarChart
                   accessibilityLayer

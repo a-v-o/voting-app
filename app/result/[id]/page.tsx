@@ -45,5 +45,9 @@ export default async function Page({
   }
   // console.log(chartData[0]);
 
-  return <ResultChart chartData={chartData} />;
+  return (
+    <div className="w-full">
+      <ResultChart chartData={chartData} />
+    </div>
+  );
 }

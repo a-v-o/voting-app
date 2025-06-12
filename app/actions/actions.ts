@@ -21,7 +21,6 @@ export async function checkEligibility(
   const electionCode = formdata.get("electionCode");
   const email = formdata.get("email");
   const code = formdata.get("code");
-  // let requiredVoter;
 
   const election = await Election.findOne({ code: electionCode }).exec();
 
@@ -29,20 +28,12 @@ export async function checkEligibility(
     return { message: "Election doesn't exist" };
   }
 
-  const voters = await Voter.find({
+  const requiredVoter: TVoter | null = await Voter.findOne({
+    email: email,
     _id: { $in: election.eligibleVoters },
   }).exec();
 
-  const voterIDs = voters.map((a) => a._id.toString());
-
-  const requiredVoter: TVoter | null = await Voter.findOne({
-    email: email,
-  }).exec();
-
-  if (
-    requiredVoter == undefined ||
-    voterIDs.includes(requiredVoter._id.toString()) == false
-  ) {
+  if (requiredVoter == undefined) {
     return { message: "You are not allowed to vote" };
   }
 
@@ -51,7 +42,7 @@ export async function checkEligibility(
   }
 
   if (requiredVoter.voted == true) {
-    return { message: "You have already voted" };
+    redirect(`/result/${election._id}`);
   }
 
   redirect(`/election/${election._id}?voterCode=${requiredVoter.code}`);
@@ -64,14 +55,10 @@ export async function vote(
   prevState: { message: string } | undefined,
   formdata: FormData
 ) {
-  console.log(voterCode);
-
   await dbConnect();
   const election = await Election.findById(electionID)
     .populate("candidates")
     .exec();
-
-  console.log(election);
 
   if (election.isLive == false) {
     return { message: "Election is not yet live" };
@@ -94,7 +81,7 @@ export async function vote(
   }
 
   if (voter.voted == true) {
-    return { message: "You have already voted" };
+    redirect(`/result/${election._id}`);
   }
 
   for (const vote of formdata.entries()) {
