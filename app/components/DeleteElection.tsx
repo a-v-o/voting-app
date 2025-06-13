@@ -23,14 +23,15 @@ const initialState = {
 export default function DeleteElection({ id }: { id: Types.ObjectId }) {
   const [state, formAction] = useActionState(
     deleteElection,
-    initialState
+    initialState,
+    pending
   );
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <AlertDialog>
         <AlertDialogTrigger asChild className="w-full">
-          <Button className="w-full" variant="destructive">
+          <Button pending={pending} className="w-full" variant="destructive">
             Delete Election
           </Button>
         </AlertDialogTrigger>
