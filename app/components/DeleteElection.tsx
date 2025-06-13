@@ -34,7 +34,7 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
             Delete Election
           </Button>
         </AlertDialogTrigger>
-        <AlertDialogContent className="w-[90%]>
+        <AlertDialogContent className="w-[90%]">
           <AlertDialogHeader>
             <AlertDialogTitle>
               Are you sure you want to delete this election?
@@ -46,7 +46,7 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <form action={formAction} className="w-full>
+            <form action={formAction} className="w-full">
               <AlertDialogAction className="w-full">
                   <input type="hidden" name="electionId" value={id.toString()}/>
                   <button type="submit">Confirm</button>
