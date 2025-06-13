@@ -489,12 +489,14 @@ export async function stopElection(
 
 //done
 export async function deleteElection(
-  electionId: Types.ObjectId,
   prevState: { message: string } | undefined
+  formdata: FormData,
 ) {
   await dbConnect();
+  const electionId = formdata.get("electionId") as string
+  const id = new Types.ObjectId(electionId)
   const imagesToDelete = [];
-  const election = await Election.findById(electionId).exec();
+  const election = await Election.findById(id).exec();
   const candidates = await Candidate.find({
     _id: { $in: election.candidates },
   }).exec();
