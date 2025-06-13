@@ -489,7 +489,7 @@ export async function stopElection(
 
 //done
 export async function deleteElection(
-  prevState: { message: string } | undefined
+  prevState: { message: string } | undefined,
   formdata: FormData,
 ) {
   await dbConnect();
