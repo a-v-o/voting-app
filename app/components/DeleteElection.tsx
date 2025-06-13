@@ -46,12 +46,12 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction asChild>
-                <form action={formAction}>
+            <form action={formAction}>
+              <AlertDialogAction>
                   <input type="hidden" name="electionId" value={id.toString()}/>
                   <button type="submit">Confirm</button>
-                </form>
-            </AlertDialogAction>
+              </AlertDialogAction>
+            </form>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
