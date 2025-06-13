@@ -21,16 +21,14 @@ const initialState = {
 };
 
 export default function DeleteElection({ id }: { id: Types.ObjectId }) {
-  const deleteElectionWithId = deleteElection.bind(null, id);
   const [state, formAction] = useActionState(
-    deleteElectionWithId,
+    deleteElection,
     initialState
   );
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <AlertDialog>
-       <form action={formAction}>
         <AlertDialogTrigger asChild className="w-full">
           <Button className="w-full" variant="destructive">
             Delete Election
@@ -49,11 +47,13 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction asChild>
-                <button type="submit">Confirm</button>
+                <form action={formAction}>
+                  <input type="hidden" name="electionId" value={id.toString()}/>
+                  <button type="submit">Confirm</button>
+                </form>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-       </form>
       </AlertDialog>
 
       <p className="text-red-500">{state.message}</p>
