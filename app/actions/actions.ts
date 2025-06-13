@@ -521,7 +521,7 @@ export async function deleteElection(
     _id: { $in: election.eligibleVoters },
   });
 
-  await del(imagesToDelete);
+  if (imagesToDelete.length > 0) await del(imagesToDelete);
   await election.deleteOne().exec();
   redirect("/admin");
 }
