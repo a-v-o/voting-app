@@ -244,7 +244,6 @@ export async function createNewCandidate(
   });
 
   await newCandidate.save();
-  console.log(newCandidate.extraFields);
 
   await Election.updateOne(
     { name: electionName },
