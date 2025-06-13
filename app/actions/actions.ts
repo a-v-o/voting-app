@@ -522,7 +522,7 @@ export async function deleteElection(
   });
 
   if (imagesToDelete.length > 0) await del(imagesToDelete);
-  await election.deleteOne().exec();
+  await Election.findByIdAndDelete(id).exec();
   redirect("/admin");
 }
 
