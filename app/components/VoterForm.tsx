@@ -63,7 +63,7 @@ export default function AddVoters({
             >
               <form
                 action={textFormAction}
-                className="flex flex-col gap-4 w-full"
+                className="flex flex-col gap-4 w-full p-px"
               >
                 <Label htmlFor="voters">Voters:</Label>
                 <Textarea

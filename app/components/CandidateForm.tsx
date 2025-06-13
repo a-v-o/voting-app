@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AnimatePresence, motion } from "motion/react";
 import ElectionControls from "./ElectionControls";
+import { InfoIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -82,7 +83,10 @@ export default function CandidateForm({
               }}
               className="flex flex-col gap-4 overflow-hidden"
             >
-              <form action={formAction} className="flex flex-col gap-4 w-full">
+              <form
+                action={formAction}
+                className="flex flex-col gap-4 w-full p-px"
+              >
                 <Select name="post">
                   <SelectTrigger>
                     <SelectValue placeholder="Select post" />
@@ -109,6 +113,9 @@ export default function CandidateForm({
                   name="picture"
                   id="picture"
                 />
+                <span className="text-xs text-red-500 flex items-center gap-2">
+                  <InfoIcon /> File shouldn&apos;t be larger than 1MB
+                </span>
                 {extraFields.map((field) => {
                   return (
                     <div
@@ -225,9 +232,11 @@ export default function CandidateForm({
                                   style={{ objectFit: "cover" }}
                                 ></Image>
                               </div>
-                              <p className="outline-0 border-0">
-                                {candidate.name}
-                              </p>
+                              <div className="overflow-auto text-nowrap">
+                                <p className="text-sm md:text-base">
+                                  {candidate.name}
+                                </p>
+                              </div>
                               <Input
                                 type="hidden"
                                 name="candidate"

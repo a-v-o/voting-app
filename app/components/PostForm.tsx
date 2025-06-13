@@ -45,7 +45,10 @@ export default function PostForm({ election }: { election: TElection }) {
               }}
               className="flex flex-col gap-4 overflow-hidden"
             >
-              <form action={formAction} className="flex flex-col gap-2 w-full">
+              <form
+                action={formAction}
+                className="flex flex-col gap-2 w-full p-px"
+              >
                 <Input type="hidden" name="election" value={election?.name} />
                 <label htmlFor="post">Post:</label>
                 <div className="flex items-center gap-2">
