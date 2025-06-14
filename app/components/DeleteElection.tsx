@@ -48,13 +48,13 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <form action={formAction} className="w-full">
               <input type="hidden" name="electionId" value={id.toString()}/>
-              <Button variant="destructive" pending={pending} type="submit" className="w-full">Confirm</Button>
+              <Button variant="destructive" pending={pending} type="submit" className="w-full">Delete</Button>
             </form>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      <p className="text-red-500">{state.message}</p>
+      <p className="text-red-500 text-center">{state.message}</p>
     </div>
   );
 }
