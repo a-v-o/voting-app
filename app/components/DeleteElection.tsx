@@ -21,10 +21,9 @@ const initialState = {
 };
 
 export default function DeleteElection({ id }: { id: Types.ObjectId }) {
-  const [state, formAction] = useActionState(
+  const [state, formAction, pending] = useActionState(
     deleteElection,
     initialState,
-    pending
   );
 
   return (
