@@ -48,7 +48,7 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <form action={formAction} className="w-full">
               <input type="hidden" name="electionId" value={id.toString()}/>
-              <Button pending={pending} type="submit">Confirm</button>
+              <Button pending={pending} type="submit">Confirm</Button>
             </form>
           </AlertDialogFooter>
         </AlertDialogContent>
