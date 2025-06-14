@@ -1,11 +1,19 @@
 import dbConnect from "@/utils/db";
-import { Election } from "@/models/models";
+import { Election, Admin } from "@/models/models";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { verifySession } from "@/utils/session";
 
 export default async function Page() {
   await dbConnect();
-  const allElections = await Election.find({}).exec();
+  const session = await verifySession();
+  const email = session.email;
+  const admin = await Admin.findOne({ email: email }).exec();
+  const allElections = await Election.find({
+    _id: { $in: admin.allowedElections },
+  }).exec();
+
   const activeElections = await Election.find({
+    _id: { $in: admin.allowedElections },
     isLive: true,
   }).exec();
 
