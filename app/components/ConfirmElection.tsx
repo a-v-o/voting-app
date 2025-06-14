@@ -21,7 +21,7 @@ export default function ConfirmElection({ id }: { id: Types.ObjectId }) {
       <form action={formAction}>
         <Button pending={pending}>Confirm Election</Button>
       </form>
-      <p className="text-red-500 text-sm">{state.message}</p>
+      <p className="text-center text-red-500 text-sm">{state.message}</p>
     </div>
   );
 }
