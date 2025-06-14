@@ -18,7 +18,7 @@ export default function StopElection({ id }: { id: Types.ObjectId }) {
       <form action={formAction} className="w-full">
         <Button className="w-full">Stop Election</Button>
       </form>
-      <p className="text-red-500 text-sm">{state.message}</p>
+      <p className="text-center text-red-500 text-sm">{state.message}</p>
     </div>
   );
 }
