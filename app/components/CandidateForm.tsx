@@ -30,6 +30,7 @@ export default function CandidateForm({
   election: TElection;
   candidates: TCandidate[];
 }) {
+  const live = election.isLive;
   const duration = 0.2;
   const posts = election?.posts;
   const [hidden, setHidden] = useState(true);
@@ -265,7 +266,7 @@ export default function CandidateForm({
       </AnimatePresence>
 
       <div className="flex justify-center">
-        <ElectionControls duration={0.4} id={election._id} />
+        <ElectionControls duration={duration} id={election._id} isLive={live} />
       </div>
     </div>
   );

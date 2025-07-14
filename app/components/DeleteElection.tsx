@@ -13,7 +13,6 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogCancel,
-  AlertDialogAction,
 } from "./ui/alert-dialog";
 
 const initialState = {
@@ -23,7 +22,7 @@ const initialState = {
 export default function DeleteElection({ id }: { id: Types.ObjectId }) {
   const [state, formAction, pending] = useActionState(
     deleteElection,
-    initialState,
+    initialState
   );
 
   return (
@@ -47,8 +46,15 @@ export default function DeleteElection({ id }: { id: Types.ObjectId }) {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <form action={formAction} className="w-full">
-              <input type="hidden" name="electionId" value={id.toString()}/>
-              <Button variant="destructive" pending={pending} type="submit" className="w-full">Delete</Button>
+              <input type="hidden" name="electionId" value={id.toString()} />
+              <Button
+                variant="destructive"
+                pending={pending}
+                type="submit"
+                className="w-full"
+              >
+                Delete
+              </Button>
             </form>
           </AlertDialogFooter>
         </AlertDialogContent>

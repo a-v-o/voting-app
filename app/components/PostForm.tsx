@@ -19,6 +19,8 @@ export default function PostForm({ election }: { election: TElection }) {
     createNewPost,
     initialState
   );
+    const live = election.isLive;
+
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -93,7 +95,7 @@ export default function PostForm({ election }: { election: TElection }) {
       </AnimatePresence>
 
       <div className="flex justify-center">
-        <ElectionControls duration={duration} id={election._id} />
+        <ElectionControls duration={duration} id={election._id} isLive={live}/>
       </div>
     </div>
   );

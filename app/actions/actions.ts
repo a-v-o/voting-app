@@ -55,13 +55,18 @@ export async function vote(
   prevState: { message: string } | undefined,
   formdata: FormData
 ) {
+  const date = new Date();
   await dbConnect();
   const election = await Election.findById(electionID)
     .populate("candidates")
     .exec();
 
-  if (election.isLive == false) {
+  if (election.startTime < date) {
     return { message: "Election is not yet live" };
+  }
+
+  if (election.endTime > date) {
+    return { message: "Election is over" };
   }
 
   if (!voterCode) {
@@ -411,11 +416,27 @@ export async function createElection(
 //done
 export async function confirmElection(
   electionId: Types.ObjectId,
-  prevState: { message: string } | undefined
+  date: Date | undefined,
+  prevState: { message: string } | undefined,
+  formdata: FormData
 ) {
+  const startTime = formdata.get("start-time");
+  const endTime = formdata.get("end-time");
+  const start = date?.toISOString().slice(0, 11).replace("T", `T${startTime}Z`);
+  const end = date?.toISOString().slice(0, 11).replace("T", `T${endTime}Z`);
+
+  if (!start || !end) {
+    return { message: "Please enter a start and end time" };
+  }
+
+  const startDateTime = new Date(start);
+  const endDateTime = new Date(end);
+
+  if (startDateTime > endDateTime) {
+    return { message: "Start time cannot be greater than end time" };
+  }
+
   await dbConnect();
-  const successfulMails = [];
-  // const unsuccessfulMails = []
 
   const election = await Election.findById(electionId).exec();
 
@@ -439,25 +460,27 @@ export async function confirmElection(
     return { message: "Add at least one voter" };
   }
 
+  election.startTime = startDateTime;
+  election.endTime = endDateTime;
+
   const voters = await Voter.find({
     _id: { $in: election.eligibleVoters },
   });
 
   for (const voter of voters) {
+    const url = `https://voting-app-funmitos-projects.vercel.app/election/${election._id}?voterCode=${voter.code}`;
     const message = {
       from: process.env.OAUTH_USER as string,
       to: voter.email,
-      subject: `You are eligible to vote in ${election.name}`,
-      text: `You are eligible to vote in the election ${election.name}. The election code is ${election.code}. Your code for this election is ${voter.code}. Please, keep it safe.`,
+      subject: `${election.name.toUpperCase()} DETAILS`,
+      text: `Hello, dear voter. Here are the details for the ${election.name}. Click on the link below to cast your votes: ${url}. The election code is ${election.code} and your code for this election is ${voter.code}. Please, keep it safe.`,
     };
     try {
       await transport.sendMail(message);
-      successfulMails.push(voter.email);
+      voter.receivedMail = true;
+      await voter.save();
     } catch (error) {
-      // unsuccessfulMails.push(voter.email);
-      console.error("Error sending email:", error);
-      console.log(successfulMails);
-      return { message: "Error sending emails to voters" };
+      console.error(`Error sending email to ${voter.email}`, error);
     }
   }
 
@@ -466,9 +489,61 @@ export async function confirmElection(
   redirect("/admin");
 }
 
+export async function retryMail(
+  prevState: { message: string } | undefined,
+  formdata: FormData
+) {
+  const electionId = new Types.ObjectId(formdata.get("election") as string);
+
+  const election = await Election.findById(electionId).exec();
+
+  if (!election.isLive) {
+    return { message: "Election isn't live." };
+  }
+
+  if (!checkAdminAccess(election)) {
+    return { message: "You do not have the right to edit this election" };
+  }
+
+  const transport = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_ADDRESS as string,
+      pass: process.env.APP_PASSWORD as string,
+    },
+  });
+
+  const voters = await Voter.find({
+    _id: { $in: election.eligibleVoters },
+    receivedMail: false,
+  });
+
+  if (voters.length == 0) {
+    return { message: "All voters have received their mail." };
+  }
+
+  for (const voter of voters) {
+    const url = `https://voting-app-funmitos-projects.vercel.app/election/${election._id}?voterCode=${voter.code}`;
+    const message = {
+      from: process.env.OAUTH_USER as string,
+      to: voter.email,
+      subject: `${election.name.toUpperCase()} DETAILS`,
+      text: `Hello, dear voter. Here are the details for the ${election.name}. Click on the link below to cast your votes: ${url}. The election code is ${election.code} and your code for this election is ${voter.code}. Please, keep it safe.`,
+    };
+    try {
+      await transport.sendMail(message);
+      voter.receivedMail = true;
+      await voter.save();
+    } catch (error) {
+      console.error(`Error sending email to ${voter.email}`, error);
+    }
+  }
+}
+
 //done
 export async function stopElection(
   electionId: Types.ObjectId,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   prevState: { message: string } | undefined
 ) {
   await dbConnect();
@@ -490,11 +565,11 @@ export async function stopElection(
 //done
 export async function deleteElection(
   prevState: { message: string } | undefined,
-  formdata: FormData,
+  formdata: FormData
 ) {
   await dbConnect();
-  const electionId = formdata.get("electionId") as string
-  const id = new Types.ObjectId(electionId)
+  const electionId = formdata.get("electionId") as string;
+  const id = new Types.ObjectId(electionId);
   const imagesToDelete = [];
   const election = await Election.findById(id).exec();
   const candidates = await Candidate.find({

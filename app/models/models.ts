@@ -6,6 +6,7 @@ const voterSchema = new Schema({
   email: String,
   code: String,
   voted: Boolean,
+  receivedMail: Boolean,
 });
 
 export const Voter = models.Voter || model("Voter", voterSchema);
@@ -28,6 +29,8 @@ const electionSchema = new Schema({
   createdBy: Types.ObjectId,
   eligibleVoters: [{ type: Types.ObjectId, ref: Voter }],
   candidates: [{ type: Types.ObjectId, ref: Candidate }],
+  startTime: Date,
+  endTime: Date,
   posts: [String],
 });
 

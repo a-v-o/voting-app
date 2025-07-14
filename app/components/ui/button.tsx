@@ -54,13 +54,34 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {pending ? (
+        <div
+          style={{ gridTemplateAreas: "stack" }}
+          className="grid justify-center items-center"
+        >
+          <div
+            style={{ gridArea: "stack" }}
+            className={
+              pending
+                ? "flex justify-center items-center animate-spin visible"
+                : "animate-spin invisible"
+            }
+          >
+            <LoaderIcon />
+          </div>
+          <div
+            style={{ gridArea: "stack" }}
+            className={pending ? "invisible" : "visible"}
+          >
+            {children}
+          </div>
+        </div>
+        {/* {pending ? (
           <div className="animate-spin">
             <LoaderIcon />
           </div>
         ) : (
           children
-        )}
+        )} */}
       </Comp>
     );
   }

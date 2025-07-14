@@ -9,9 +9,11 @@ import { motion } from "motion/react";
 export default function ElectionControls({
   id,
   duration,
+  isLive
 }: {
   id: Types.ObjectId;
   duration: number;
+  isLive: boolean
 }) {
   return (
     <motion.div
@@ -21,8 +23,7 @@ export default function ElectionControls({
       }}
       className="w-min flex flex-col md:flex-row gap-4 justify-center items-center mt-8"
     >
-      <ConfirmElection id={id} />
-      <StopElection id={id} />
+      {isLive ? (<StopElection id={id} />) : (<ConfirmElection id={id} />)}
       <DeleteElection id={id} />
     </motion.div>
   );

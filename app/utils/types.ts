@@ -14,6 +14,7 @@ export type TVoter = {
   email: string;
   code: string;
   voted: boolean;
+  receivedMail: boolean;
 };
 
 export type TCandidate = {
@@ -33,6 +34,8 @@ export type TElection = {
   createdBy: Types.ObjectId;
   eligibleVoters: TVoter;
   candidates: TCandidate[];
+  startTime: Date;
+  endTime: Date;
   posts: string[];
 };
 

@@ -5,6 +5,7 @@ import {
   addVotersByText,
   addVotersByUpload,
   deleteVoter,
+  retryMail,
 } from "@/actions/actions";
 import { Button } from "@/components/ui/button";
 import { TElection, TVoter } from "@/utils/types";
@@ -13,6 +14,7 @@ import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
 import { AnimatePresence, motion } from "motion/react";
 import ElectionControls from "./ElectionControls";
+import { MailIcon } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -35,6 +37,12 @@ export default function AddVoters({
     addVotersByUpload,
     initialState
   );
+
+  const [retryState, retryFormAction, retryPending] = useActionState(
+    retryMail,
+    initialState
+  );
+  const live = election.isLive;
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -122,7 +130,7 @@ export default function AddVoters({
                 action={deleteVoter}
                 className="w-full"
               >
-                <div className="grid grid-cols-[48px_minmax(0,1fr)_auto] gap-3">
+                <div className="grid grid-cols-[48px_minmax(0,1fr)_auto_auto] gap-3 items-center">
                   <p>{index + 1}</p>
                   <p className="overflow-auto">{voter.email}</p>
 
@@ -137,16 +145,30 @@ export default function AddVoters({
                     name="electionName"
                     value={election.name}
                   />
+                  <MailIcon color={voter.receivedMail ? "green" : "red"} />
                   <Button variant="destructive">Delete</Button>
                 </div>
               </form>
             );
           })}
+
+          <div className="self-center flex flex-col items-center">
+            <form action={retryFormAction}>
+              <input
+                type="hidden"
+                name="election"
+                value={election._id.toString()}
+              />
+              <Button pending={retryPending}>Retry Mail</Button>
+            </form>
+
+            <p className="text-red-600">{retryState?.message}</p>
+          </div>
         </motion.div>
       </AnimatePresence>
 
       <div className="flex justify-center">
-        <ElectionControls duration={duration} id={election._id} />
+        <ElectionControls duration={duration} id={election._id} isLive={live} />
       </div>
     </div>
   );
