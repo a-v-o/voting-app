@@ -11,6 +11,7 @@ import bcrypt from "bcrypt";
 import { createSession, deleteSession, verifySession } from "@/utils/session";
 import nodemailer from "nodemailer";
 import * as XLSX from "xlsx";
+import { TElection } from "../utils/types";
 
 //done
 export async function checkEligibility(
@@ -61,11 +62,11 @@ export async function vote(
     .populate("candidates")
     .exec();
 
-  if (election.startTime < date) {
+  if (election.startTime > date) {
     return { message: "Election is not yet live" };
   }
 
-  if (election.endTime > date) {
+  if (election.endTime < date) {
     return { message: "Election is over" };
   }
 
@@ -438,7 +439,7 @@ export async function confirmElection(
 
   await dbConnect();
 
-  const election = await Election.findById(electionId).exec();
+  const election: TElection = await Election.findById(electionId).exec();
 
   const transport = nodemailer.createTransport({
     service: "gmail",
@@ -473,7 +474,13 @@ export async function confirmElection(
       from: process.env.OAUTH_USER as string,
       to: voter.email,
       subject: `${election.name.toUpperCase()} DETAILS`,
-      text: `Hello, dear voter. Here are the details for the ${election.name}. Click on the link below to cast your votes: ${url}. The election code is ${election.code} and your code for this election is ${voter.code}. Please, keep it safe.`,
+      text: `Hello, dear voter. Here are the details for the ${
+        election.name
+      }. Click on the link below to cast your votes: ${url}. The election code is ${
+        election.code
+      } and your code for this election is ${
+        voter.code
+      }. Please, keep it safe. The election starts by ${election.startTime.toUTCString()} and ends by ${election.endTime.toUTCString()} (UTC)`,
     };
     try {
       await transport.sendMail(message);

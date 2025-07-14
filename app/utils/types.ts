@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Types, Document } from "mongoose";
 
 export type TAdmin = {
   _id: Types.ObjectId;
@@ -26,18 +26,18 @@ export type TCandidate = {
   extraFields: Field[];
 };
 
-export type TElection = {
+export interface TElection extends Document {
   _id: Types.ObjectId;
   code: string;
   isLive: boolean;
   name: string;
   createdBy: Types.ObjectId;
-  eligibleVoters: TVoter;
+  eligibleVoters: TVoter[];
   candidates: TCandidate[];
   startTime: Date;
   endTime: Date;
   posts: string[];
-};
+}
 
 export type Entry = {
   [key: string]: string | number;

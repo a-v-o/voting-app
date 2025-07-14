@@ -60,7 +60,7 @@ export default function VotingPage({
                                   alt={"Image of " + candidate.name}
                                   width={480}
                                   height={480}
-                                  className="object-cover"
+                                  className="object-cover aspect-square"
                                 ></Image>
                               </div>
                               <div className="flex flex-col gap-4 uppercase w-full text-xs md:text-base">
