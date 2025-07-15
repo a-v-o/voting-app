@@ -27,7 +27,7 @@ export function NavBar() {
     timerRef.current = setTimeout(() => {
       isLongPress.current = true;
       setAction("longpress");
-    }, 500);
+    }, 2000);
   }
 
   function handleOnMouseDown() {
@@ -51,19 +51,17 @@ export function NavBar() {
   }
 
   return (
-    <nav className="h-16 w-content px-4 absolute top-0 right-0 justify-end gap-4 flex shrink-0 items-center z-10">
-      <Button variant="outline" asChild>
+    <nav className="h-16 w-content px-2 md:px-4 absolute top-0 right-0 justify-end gap-4 flex shrink-0 items-center z-10">
+      <Button variant="outline" asChild className="px-2" size="icon">
         <Link href="/" className="h-5 w-5">
           <HomeIcon />
         </Link>
       </Button>
-      <div className="transition-all relative select-none">
+      <div className="flex transition-all relative select-none">
         <Button
           variant="outline"
           size="icon"
-          className={
-            action == "longpress" ? "scale-0" : "scale-100 transition-all"
-          }
+          className={action == "longpress" ? "hidden" : "flex transition-all"}
           onMouseDown={handleOnMouseDown}
           onMouseUp={handleOnMouseUp}
           onTouchStart={handleOnTouchStart}
@@ -78,10 +76,11 @@ export function NavBar() {
           <span className="sr-only">Toggle theme</span>
         </Button>
         <Button
+          size="icon"
           className={
             action == "longpress"
-              ? "absolute top-0 left-0 scale-100 transition-all"
-              : "absolute scale-0"
+              ? "flex scale-100 transition-all"
+              : "hidden scale-0"
           }
           asChild
           variant="outline"

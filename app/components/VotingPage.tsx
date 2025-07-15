@@ -41,7 +41,7 @@ export default function VotingPage({
                 {post}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-2">
               <RadioGroup name={post} className="flex flex-col gap-8">
                 {candidates.map((candidate) => {
                   if (candidate.post.toLowerCase() == post.toLowerCase()) {
@@ -52,16 +52,16 @@ export default function VotingPage({
                         key={candidate.name}
                       >
                         <Card>
-                          <CardContent className="w-full flex items-center justify-between p-4">
-                            <div className="w-max flex gap-4">
-                              <div className="aspect-square w-20 md:w-32 lg:w-44">
+                          <CardContent className="w-full flex items-center justify-between p-3 md:p-4">
+                            <div className="w-full flex gap-4">
+                              <div className="aspect-square w-28 md:w-32 lg:w-44">
                                 <Image
                                   src={candidate.image}
                                   alt={"Image of " + candidate.name}
                                   width={480}
                                   height={480}
-                                  className="object-cover aspect-square"
-                                ></Image>
+                                  className="object-cover object-left-top aspect-square"
+                                />
                               </div>
                               <div className="flex flex-col gap-4 uppercase w-full text-xs md:text-base">
                                 <h2>Name: {candidate.name}</h2>

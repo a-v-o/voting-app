@@ -56,17 +56,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         <div
           style={{ gridTemplateAreas: "stack" }}
-          className="grid justify-center items-center"
+          className="flex justify-center items-center relative"
         >
           <div
             style={{ gridArea: "stack" }}
             className={
               pending
-                ? "flex justify-center items-center animate-spin visible"
-                : "animate-spin invisible"
+                ? "absolute left-1/2 -translate-x-1/2 flex justify-center items-center animate-spin visible"
+                : "absolute left-1/2 -translate-x-1/2 invisible"
             }
           >
-            <LoaderIcon />
+            <LoaderIcon className="animate-spin" />
           </div>
           <div
             style={{ gridArea: "stack" }}
