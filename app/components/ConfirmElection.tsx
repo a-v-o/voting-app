@@ -69,14 +69,14 @@ export default function ConfirmElection({ id }: { id: Types.ObjectId }) {
             </PopoverContent>
           </Popover>
           <form action={formAction} className="w-full flex flex-col gap-3">
-            <Label htmlFor="start-time-picker">Start Time</Label>
+            <Label htmlFor="start-time-picker">Start Time (UTC)</Label>
             <Input
               id="start-time-picker"
               type="time"
               step="1"
               name="start-time"
             />
-            <Label htmlFor="end-time-picker">End Time</Label>
+            <Label htmlFor="end-time-picker">End Time (UTC)</Label>
             <Input id="end-time-picker" type="time" step="1" name="end-time" />
             <Button pending={pending} type="submit" className="w-full">
               Confirm
