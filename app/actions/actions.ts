@@ -634,7 +634,7 @@ export async function signUp(
   const admin = new Admin({
     email: adminEmail,
     password: hashedPassword,
-    allowedToCreate: false,
+    allowedToCreate: true,
     isSupreme: false,
   });
 

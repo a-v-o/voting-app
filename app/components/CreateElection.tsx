@@ -25,7 +25,7 @@ export default function CreateElection() {
           <Button pending={pending}>New Election</Button>
         </form>
       </div>
-      <p className="text-red-500">{state.message}</p>
+      <p className="text-red-500 p-8 text-center">{state.message}</p>
     </div>
   );
 }

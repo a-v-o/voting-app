@@ -32,7 +32,7 @@ export default async function Page({
   }
 
   return (
-    <div className="w-[90%] lg:w-2/3 flex flex-col gap-6 items-center p-8">
+    <div className="w-[90%] lg:w-2/3 flex flex-col gap-6 items-center p-4">
       <h1>{election?.name}</h1>
       <Tabs defaultValue="posts" className="w-full flex flex-col gap-4">
         <TabsList className="grid grid-cols-3">

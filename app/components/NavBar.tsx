@@ -51,7 +51,7 @@ export function NavBar() {
   }
 
   return (
-    <nav className="h-16 w-content px-2 md:px-4 absolute top-0 right-0 justify-end gap-4 flex shrink-0 items-center z-10">
+    <nav className="h-16 w-content px-6 absolute top-0 right-0 justify-end gap-4 flex shrink-0 items-center z-10">
       <Button variant="outline" asChild className="px-2" size="icon">
         <Link href="/" className="h-5 w-5">
           <HomeIcon />
@@ -71,7 +71,7 @@ export function NavBar() {
             setTheme(theme === "dark" ? "light" : "dark");
           }}
         >
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 dark:hidden" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>

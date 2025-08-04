@@ -94,7 +94,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </Link>
           </Button> */}
           <Button variant="outline" onClick={logOut}>
-            <LogOut />
+            <LogOut className="mx-2" />
             Log out
           </Button>
         </div>

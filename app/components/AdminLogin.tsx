@@ -21,7 +21,7 @@ const initialState = {
 export default function AdminLogin() {
   const [state, formAction, pending] = useActionState(adminLogin, initialState);
   return (
-    <div className={"flex flex-col gap-6"}>
+    <div className={"p-8 flex flex-col gap-6"}>
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
