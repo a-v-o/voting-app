@@ -23,7 +23,7 @@ export default async function Home() {
       <CardContent></CardContent>
       <CardFooter className="flex justify-between">
         <Link href="/login">
-          <Button variant="outline">Login</Button>
+          <Button variant="outline">Login to vote</Button>
         </Link>
         <Link href="/admin">
           <Button>Login as admin</Button>

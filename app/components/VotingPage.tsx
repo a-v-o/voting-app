@@ -92,7 +92,7 @@ export default function VotingPage({
         );
       })}
       <Button pending={pending}>Submit Votes</Button>
-      <p>{state?.message}</p>
+      <p className="text-sm text-red-600">{state?.message}</p>
     </form>
   );
 }

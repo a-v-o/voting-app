@@ -37,11 +37,15 @@ export default async function SelectElection({
       <Search />
       {queriedElections.map((election) => {
         return (
-          <Button variant="outline" asChild key={election._id.toString()}>
-            <Link href={`/admin/editElection/${election._id}`}>
+          <Link
+            className="w-full"
+            href={`/admin/editElection/${election._id}`}
+            key={election._id.toString()}
+          >
+            <Button variant="outline" className="w-full">
               <p>{election.name}</p>
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         );
       })}
     </div>

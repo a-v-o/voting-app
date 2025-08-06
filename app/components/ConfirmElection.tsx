@@ -32,9 +32,6 @@ export default function ConfirmElection({ id }: { id: Types.ObjectId }) {
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      {/* <form action={formAction}>
-        <Button pending={pending}>Confirm Election</Button>
-      </form> */}
       <Dialog>
         <DialogTrigger asChild className="w-full">
           <Button pending={pending} className="w-full">
@@ -63,6 +60,8 @@ export default function ConfirmElection({ id }: { id: Types.ObjectId }) {
                 captionLayout="dropdown"
                 selected={date}
                 onSelect={(date) => {
+                  const offset = new Date().getTimezoneOffset();
+                  date?.setMinutes(date.getMinutes() - offset);
                   setDate(date);
                 }}
               />
@@ -82,9 +81,9 @@ export default function ConfirmElection({ id }: { id: Types.ObjectId }) {
               Confirm
             </Button>
           </form>
+          <p className="text-center text-red-500 text-sm">{state?.message}</p>
         </DialogContent>
       </Dialog>
-      <p className="text-center text-red-500 text-sm">{state.message}</p>
     </div>
   );
 }
