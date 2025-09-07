@@ -35,7 +35,7 @@ export default function VotingPage({
     >
       {election?.posts.map((post) => {
         return (
-          <Card key={post} className="w-full lg:w-3/4 md:p-8">
+          <Card key={post} className="w-full lg:w-3/4 md:p-8 rounded-sm">
             <CardHeader>
               <CardTitle className="capitalize mb-3 text-center" key={post}>
                 {post}
@@ -51,8 +51,8 @@ export default function VotingPage({
                         htmlFor={candidate.name}
                         key={candidate.name}
                       >
-                        <Card>
-                          <CardContent className="w-full flex items-center justify-between p-3 md:p-4">
+                        <Card className="rounded-sm">
+                          <CardContent className="w-full flex items-center justify-between p-2 md:p-4">
                             <div className="w-full flex gap-4">
                               <div className="aspect-square w-28 md:w-32 lg:w-44">
                                 <Image
